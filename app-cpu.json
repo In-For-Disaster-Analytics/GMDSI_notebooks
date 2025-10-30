@@ -7,7 +7,7 @@
   "runtime": "SINGULARITY",
   "runtimeVersion": null,
   "runtimeOptions": ["SINGULARITY_RUN"],
-  "containerImage": "docker://ghcr.io/in-for-disaster-analytics/gmdsi_notebooks-cpu:sha-e6a9ccb",
+  "containerImage": "docker://ghcr.io/in-for-disaster-analytics/gmdsi_notebooks-cpu:sha-0fbefd3", 
   "jobType": "BATCH",
   "maxJobs": -1,
   "maxJobsPerUser": -1,
