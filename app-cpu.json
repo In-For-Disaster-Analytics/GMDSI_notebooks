@@ -141,11 +141,11 @@
   },
   "tags": ["portalName: ALL"],
   "notes": {
-    "label": "Cookbook - Jupyter Lab (CPU)",
+    "label": "GMDSI Notebooks",
     "hideNodeCountAndCoresPerNode": true,
     "isInteractive": true,
     "icon": "jupyter",
-    "category": "Data Processing",
+    "category": "Modeling",
     "queueFilter": ["development", "vm-small"]
   }
 }
