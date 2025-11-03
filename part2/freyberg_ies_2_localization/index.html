@@ -1,0 +1,2178 @@
+<!-- Elements added to "main.html" will be displayed on all pages -->
+ 
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Information in support of the Groundwater Decision Support Modeling tutorials. (Forked Repo)
+Hugman, R., White, J.T., Fienen, M.N., and Hunt, R.J., 2022, Parameter Estimation, Uncertainty Analysis, and Optimization with the PEST++ Family of codes: Tutorial Jupyter Notebooks: U.S. Geological Survey data release, https://doi.org/10.5066/P901F9G0.">
+      
+      
+        <meta name="author" content="GMDSI Team">
+      
+      
+        <link rel="canonical" href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks/part2/freyberg_ies_2_localization/">
+      
+      
+        <link rel="prev" href="../freyberg_ies_1_basics/">
+      
+      
+        <link rel="next" href="../freyberg_da_prep/">
+      
+      
+      <link rel="icon" href="https://cdn.jsdelivr.net/gh/TACC/Core-CMS-Custom@813aa7c/ptdatax_assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>PEST++IES - Localization - Groundwater Modeling Decision Support</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family='Benton+Sans',+'Open+Sans':300,300i,400,400i,700,700i%7CRoboto:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"'Benton Sans', 'Open Sans'";--md-code-font:"Roboto"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/tacc.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pestpp-ies-localization" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Determine classes -->
+
+
+  
+
+
+<!-- Header -->
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav
+    class="md-header__inner md-grid"
+    aria-label="Header"
+  >
+
+    <!-- Link to home -->
+    <a
+      href="../.."
+      title="Groundwater Modeling Decision Support"
+      class="md-header__button md-logo"
+      aria-label="Groundwater Modeling Decision Support"
+      data-md-component="logo"
+    >
+      
+  <img src="../../assets/pt2050/pillar1.svg" alt="logo">
+
+    </a>
+
+    <!-- Button to open drawer -->
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Groundwater Modeling Decision Support
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PEST++IES - Localization
+            
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Button to open search modal -->
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+
+      <!-- Search interface -->
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    <!-- Color palette toggle -->
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+
+    <!-- User preference: color palette -->    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+
+    <!-- Site language selector -->
+    
+
+
+
+    <!-- Repository information -->
+    <!-- Removed -->
+  </nav>
+
+  <!-- Navigation tabs (sticky) -->
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  GMDSI Tutorial Notebooks
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../intro/" class="md-tabs__link">
+          
+  
+    
+  
+  Selected Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../part1/" class="md-tabs__link">
+          
+  
+    
+  
+  Theory, Concepts and PEST Mechanics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  Decision Support Modelling
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Groundwater Modeling Decision Support" class="md-nav__button md-logo" aria-label="Groundwater Modeling Decision Support" data-md-component="logo">
+      
+  <img src="../../assets/pt2050/pillar1.svg" alt="logo">
+
+    </a>
+    Groundwater Modeling Decision Support
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    In-For-Disaster-Analytics/GMDSI_notebooks
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GMDSI Tutorial Notebooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../intro/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Selected Topics
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Selected Topics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_regression/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Regression
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_pyemu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to pyEMU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_geostatistics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Geostatistics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_bayes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Bayes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_svd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to SVD
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../part1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Theory, Concepts and PEST Mechanics
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Theory, Concepts and PEST Mechanics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_trial_and_error/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual Trial-and-Error
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_pest_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST Basics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_k/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automated Calibration with PEST
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_k_and_r/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Calibration with Two Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_k_r_fluxobs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multiple Observation Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_glm_response_surface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GLM and the Objective Function Response Surface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_pilotpoints_1_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spatial Parameterisation with Pilot Points - setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_pilotpoints_2_run/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spatial Parameterisation with Pilot Points - run
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/intro_to_regularization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Regularization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/intro_to_fosm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to FOSM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_1_local_sensitivity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Sensitivity and Identifiability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_2_global_sensitivity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Global Sensitivity Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part1/freyberg_monte_carlo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monte Carlo
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Decision Support Modelling
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Decision Support Modelling
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_pstfrom_pest_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Constructing a High-Dimensional PEST Interface with pyEMU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_obs_and_weights/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Observation Values, Weights and Noise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_prior_monte_carlo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prior Monte Carlo
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_glm_1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++GLM - Calculating a Jacobian Matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_fosm_and_dataworth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FOSM and Data Worth
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_glm_2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++GLM - Highly- Parameterized Regularized Inversion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_ies_1_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++IES - Basics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    PEST++IES - Localization
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    PEST++IES - Localization
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Localization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Localization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#localization-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      Localization Matrix
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-adaptive-localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic Adaptive Localization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-current-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Current Tutorial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Current Tutorial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Admin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pesties-with-no-localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      PEST++IES with no localization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simple-temporal-localization-and-common-sense" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Temporal Localization (and common sense)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Simple Temporal Localization (and common sense)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#temporal-localization-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Temporal Localization Outcomes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distance-based-localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distance Based Localization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Distance Based Localization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spatial-localization-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spatial Localization Outcomes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pesties-with-automatic-adaptive-localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      PEST++IES with Automatic Adaptive Localization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PEST++IES with Automatic Adaptive Localization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#autoadaloc-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      AutoAdaLoc Outcomes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_da_prep/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++DA - Getting Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_da_run/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++DA - Sequential Data Assimilation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Localization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Localization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#localization-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      Localization Matrix
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-adaptive-localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic Adaptive Localization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-current-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Current Tutorial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Current Tutorial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Admin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pesties-with-no-localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      PEST++IES with no localization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simple-temporal-localization-and-common-sense" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Temporal Localization (and common sense)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Simple Temporal Localization (and common sense)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#temporal-localization-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Temporal Localization Outcomes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distance-based-localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distance Based Localization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Distance Based Localization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spatial-localization-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spatial Localization Outcomes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pesties-with-automatic-adaptive-localization" class="md-nav__link">
+    <span class="md-ellipsis">
+      PEST++IES with Automatic Adaptive Localization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PEST++IES with Automatic Adaptive Localization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#autoadaloc-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      AutoAdaLoc Outcomes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+
+
+                  
+
+  
+  
+
+
+<h1 id="pestpp-ies-localization">PESTPP-IES - Localization<a class="headerlink" href="#pestpp-ies-localization" title="Permanent link">&para;</a></h1>
+<p>In the previous tutorial ("ies_1_basics") we introduced PESTPP-IES, demonstrated a rudimentary setup and explored some of the outcomes. In the current tutorial we are going to introduce "localization".</p>
+<p>As discussed in the previous tutorial, PESTPP-IES does not calculate derivatives using finite parameter differences. Instead, by running the model using each member of the parameter ensemble, it calculates approximate partial derivatives from cross-covariances between parameter values and model outputs that are calculated using members of the ensemble. This formulation of the inverse problem allows estimation of a virtually unlimited set of parameters, and drastically reduces the computational burden of estimating the relation between parameters and observations.</p>
+<p>But it is not all sunshine and rainbows.</p>
+<p>Calculating an empirical cross-covariance between large numbers of parameters and observations, with a limited number of realizations is likely to lead to spurious cross-correlations. Because (1) the relationship between observations and parameters is estimated empirically, and (2) in most cases, the number of realizations will be significantly smaller than the number of parameters the estimated cross-covariances may contain error.</p>
+<p>This results in some parameters being adjusted, even if there was no information in the observation dataset to require their adjustment. In other words, artificial relations between parameters and observations can emerge. This can result in the cardinal sin of underestimating of forecast uncertainty - a phenomenon referred to as "ensemble collapse". </p>
+<h3 id="localization">Localization<a class="headerlink" href="#localization" title="Permanent link">&para;</a></h3>
+<p>To deal with these challenges we can employ "localization". Localization refers to a strategy in which only "local" covariances are allowed to emerge. In essence, a modeller defines a "local" neighbourhood around each observation, specifying the parameters which are expected to influence it. Effectively, this creates a series of "local" history matching problems using subsets of parameters and observations. Conceptually, localization allows a form of expert knowledge to be expressed in regard to how parameters and observations are or are not related. For example, an observation of groundwater level today cannot be correlated to the recharge which will occur tomorrow (e.g. information cannot flow backwards in time), or groundwater levels cannot inform porosity parameters, etc. </p>
+<h4 id="localization-matrix">Localization Matrix<a class="headerlink" href="#localization-matrix" title="Permanent link">&para;</a></h4>
+<p>PESTPP-IES allows users to provide a localizing matrix to enforce physically plausible parameter-to-observation relations. This matrix must be prepared by the user. Matrix rows are observation names and/or observation group names, and columns are parameter names and/or parameter group names. Elements of the matrix should range between 0.0 and 1.0. A value of 0.0 removes any spurious sensitivities between the relevant observation and parameter. During this tutorial we will demonstrate how to construct such a matrix using <code>pyEMU</code> using two localization strategies.</p>
+<h4 id="automatic-adaptive-localization">Automatic Adaptive Localization<a class="headerlink" href="#automatic-adaptive-localization" title="Permanent link">&para;</a></h4>
+<p>PESTPP-IES also has an option to automate this process by implementing a form of <code>automatic adaptive localization</code>. When employed, during each iteration, PESTPP-IES calculates the empirical correlation coefficient between each parameter and each observation. A "background" or "error" distribution for this correlation coefficient is also calculated. By comparing (in statistical sense) these two, statistically significant correlations are identified and retained to construct a localization matrix. This matrix is then fed forward into the parameter adjustment process. Note that automatic adaptive localization can be implemented in tandem with a user supplied localization matrix. In this manner, the automated process is only applied to non-zero elements in the user supplied matrix. We will implement this option during the current tutorial.</p>
+<p>In practice, automatic localization doesn't resolve the level of localization that can be achieved by a matrix explicitly constructed by the user. However, it is better than no localization at all. In general, implementing some form of localization is recommended.</p>
+<h2 id="the-current-tutorial">The Current Tutorial<a class="headerlink" href="#the-current-tutorial" title="Permanent link">&para;</a></h2>
+<p>In the current notebook we are going to pick up after the "ies_1_basics" tutorial. We setup PEST++IES and ran it. We found that we can achieve great fits with historical data...but that (for some forecasts) the calculated posterior probabilities failed to cover the truth.</p>
+<p>In this tutorial we are going to take a first stab at fixing that. We are going to implement localization to remove the potential for spurious correlations between observations and parameters incurred by using an "approximate" partial derivatives.  </p>
+<h3 id="admin">Admin<a class="headerlink" href="#admin" title="Permanent link">&para;</a></h3>
+<p>The next couple of cells load necessary dependencies and call a convenience function to prepare the PEST dataset folder for you. Simply press <code>shift+enter</code> to run the cells.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span> 
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="p">;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;dependencies&quot;</span><span class="p">))</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pyemu</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="kn">import</span><span class="w"> </span><span class="nn">flopy</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="k">assert</span> <span class="s2">&quot;dependencies&quot;</span> <span class="ow">in</span> <span class="n">flopy</span><span class="o">.</span><span class="vm">__file__</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">assert</span> <span class="s2">&quot;dependencies&quot;</span> <span class="ow">in</span> <span class="n">pyemu</span><span class="o">.</span><span class="vm">__file__</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="kn">import</span><span class="w"> </span><span class="nn">herebedragons</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hbd</span>
+</span></code></pre></div>
+<p>Prepare the template directory and copy across model files from the previous tutorial. Make sure you complete the previous tutorial first.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># specify the temporary working folder</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">t_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;freyberg6_template&#39;</span><span class="p">)</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">org_t_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;master_ies_1&quot;</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">org_t_d</span><span class="p">):</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;you need to run the &#39;/freyberg_ies_1_basics.ipynb&#39; notebook&quot;</span><span class="p">)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">t_d</span><span class="p">):</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">t_d</span><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">org_t_d</span><span class="p">,</span><span class="n">t_d</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Load the PEST control file as a <code>Pst</code> object.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">pst_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_mf6.pst&#39;</span><span class="p">)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">pst</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Pst</span><span class="p">(</span><span class="n">pst_path</span><span class="p">)</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">assert</span> <span class="s1">&#39;observed&#39;</span> <span class="ow">in</span> <span class="n">pst</span><span class="o">.</span><span class="n">observation_data</span><span class="o">.</span><span class="n">columns</span>
+</span></code></pre></div>
+<p>Check that we are at the right stage to run ies:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_mf6.3.pcs.csv&#39;</span><span class="p">)),</span> <span class="s2">&quot;you need to run the &#39;/freyberg_ies_1_basics.ipynb&#39; notebook&quot;</span>
+</span></code></pre></div>
+<p>A quick reminder of the PEST++ optional control variables which have been specified:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span>
+</span></code></pre></div>
+<h2 id="pesties-with-no-localization">PEST++IES with no localization<a class="headerlink" href="#pesties-with-no-localization" title="Permanent link">&para;</a></h2>
+<p>Just as a reminder, and so we can compare the results later on, let's load in the results from the previous tutorial and take a look at the (1) timeseries of measured and simulated heads, (2) the forecast probability distributions and (3) compare parameter prior and posterior distributions.</p>
+<p>As in the previous tutorial, let's write a couple of functions to helps us plot these up.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">plot_tseries_ensembles</span><span class="p">(</span><span class="n">pr_oe</span><span class="p">,</span> <span class="n">pt_oe</span><span class="p">,</span><span class="n">noise</span><span class="p">,</span> <span class="n">onames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hds&quot;</span><span class="p">,</span><span class="s2">&quot;sfr&quot;</span><span class="p">]):</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">pst</span><span class="o">.</span><span class="n">try_parse_name_metadata</span><span class="p">()</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">obs</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">observation_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">obs</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">obs</span><span class="o">.</span><span class="n">oname</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">onames</span><span class="p">)]</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">obs</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">obs</span><span class="o">.</span><span class="n">obgnme</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pst</span><span class="o">.</span><span class="n">nnz_obs_groups</span><span class="p">),:]</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">obs</span><span class="o">.</span><span class="n">obgnme</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">ogs</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">obgnme</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">fig</span><span class="p">,</span><span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ogs</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">ogs</span><span class="p">)))</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">ogs</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span><span class="n">og</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span><span class="n">ogs</span><span class="p">):</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>        <span class="n">oobs</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">obs</span><span class="o">.</span><span class="n">obgnme</span><span class="o">==</span><span class="n">og</span><span class="p">,:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>        <span class="n">oobs</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">oobs</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>        <span class="n">oobs</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>        <span class="n">tvals</span> <span class="o">=</span> <span class="n">oobs</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>        <span class="n">onames</span> <span class="o">=</span> <span class="n">oobs</span><span class="o">.</span><span class="n">obsnme</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>        <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tvals</span><span class="p">,</span><span class="n">pr_oe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">onames</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="s2">&quot;0.5&quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pr_oe</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>        <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tvals</span><span class="p">,</span><span class="n">pt_oe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">onames</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pt_oe</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>        <span class="n">oobs</span> <span class="o">=</span> <span class="n">oobs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">oobs</span><span class="o">.</span><span class="n">weight</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,:]</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>        <span class="n">tvals</span> <span class="o">=</span> <span class="n">oobs</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>        <span class="n">onames</span> <span class="o">=</span> <span class="n">oobs</span><span class="o">.</span><span class="n">obsnme</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>        <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tvals</span><span class="p">,</span><span class="n">noise</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">onames</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="s2">&quot;r&quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">noise</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">oobs</span><span class="o">.</span><span class="n">time</span><span class="p">,</span><span class="n">oobs</span><span class="o">.</span><span class="n">obsval</span><span class="p">,</span><span class="s2">&quot;r-&quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">og</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>    <span class="k">return</span> <span class="n">fig</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">plot_forecast_hist_compare</span><span class="p">(</span><span class="n">pt_oe</span><span class="p">,</span><span class="n">pr_oe</span><span class="p">,</span> <span class="n">last_pt_oe</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">last_prior</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>        <span class="n">num_plots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">forecast_names</span><span class="p">)</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>        <span class="n">num_cols</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>        <span class="k">if</span> <span class="n">last_pt_oe</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>            <span class="n">num_cols</span><span class="o">=</span><span class="mi">2</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="n">fig</span><span class="p">,</span><span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num_plots</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">num_cols</span><span class="p">,</span><span class="n">num_plots</span> <span class="o">*</span> <span class="mf">2.5</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="s1">&#39;row&#39;</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="s1">&#39;row&#39;</span><span class="p">)</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>        <span class="k">for</span> <span class="n">axs</span><span class="p">,</span><span class="n">forecast</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">pst</span><span class="o">.</span><span class="n">forecast_names</span><span class="p">):</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>            <span class="c1"># plot first column with current outcomes</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>            <span class="k">if</span> <span class="n">num_cols</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>                <span class="n">axs</span><span class="o">=</span><span class="p">[</span><span class="n">axs</span><span class="p">]</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>            <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>            <span class="c1"># just for aesthetics</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>            <span class="n">bin_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt_oe</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">forecast</span><span class="p">],</span> <span class="n">pr_oe</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">forecast</span><span class="p">],]</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>            <span class="k">if</span> <span class="n">num_cols</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>                <span class="n">bin_cols</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">last_pt_oe</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">forecast</span><span class="p">],</span><span class="n">last_prior</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">forecast</span><span class="p">]])</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>            <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">bin_cols</span><span class="p">),</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>                                         <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#get the bin edges</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>            <span class="n">pr_oe</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">forecast</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;0.5&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>            <span class="n">pt_oe</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">forecast</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">forecast</span><span class="p">)</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>            <span class="n">fval</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">observation_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">forecast</span><span class="p">,</span><span class="s2">&quot;obsval&quot;</span><span class="p">]</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">fval</span><span class="p">,</span><span class="n">fval</span><span class="p">],</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">(),</span><span class="s2">&quot;r-&quot;</span><span class="p">)</span>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>            <span class="c1"># plot second column with other outcomes</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>            <span class="k">if</span> <span class="n">num_cols</span> <span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>                <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>                <span class="n">last_prior</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">forecast</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;0.5&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>                <span class="n">last_pt_oe</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">forecast</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>                <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">forecast</span><span class="p">)</span>
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>                <span class="n">fval</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">observation_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">forecast</span><span class="p">,</span><span class="s2">&quot;obsval&quot;</span><span class="p">]</span>
+</span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">fval</span><span class="p">,</span><span class="n">fval</span><span class="p">],</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">(),</span><span class="s2">&quot;r-&quot;</span><span class="p">)</span>
+</span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>        <span class="c1"># set ax column titles</span>
+</span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>        <span class="k">if</span> <span class="n">num_cols</span> <span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-6-33"><a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>            <span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">1.2</span><span class="p">,</span><span class="s2">&quot;Current Attempt&quot;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+</span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>            <span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">1.2</span><span class="p">,</span><span class="s2">&quot;Previous Attempt&quot;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+</span><span id="__span-6-35"><a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>        <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</span><span id="__span-6-36"><a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>        <span class="k">return</span> <span class="n">fig</span>
+</span></code></pre></div>
+<p>OK, now that that is out of the way, load the observation ensembles from the prior, the posterior and the measuered+noise:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">pr_oe</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">ObservationEnsemble</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">pst</span><span class="o">=</span><span class="n">pst</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">org_t_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.0.obs.csv&quot;</span><span class="p">))</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">pt_oe</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">ObservationEnsemble</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">pst</span><span class="o">=</span><span class="n">pst</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">org_t_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.</span><span class="si">{0}</span><span class="s2">.obs.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="p">)))</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">noise</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">ObservationEnsemble</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">pst</span><span class="o">=</span><span class="n">pst</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">org_t_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.obs+noise.csv&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>And <em>finally</em> plot them up. You should be familiar with these plots from the previous tutorial.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_tseries_ensembles</span><span class="p">(</span><span class="n">pr_oe</span><span class="p">,</span> <span class="n">pt_oe</span><span class="p">,</span><span class="n">noise</span><span class="p">,</span> <span class="n">onames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hds&quot;</span><span class="p">,</span><span class="s2">&quot;sfr&quot;</span><span class="p">])</span>
+</span></code></pre></div>
+<p>As you recall, the posterior fails to capture the truth for some forecasts:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_forecast_hist_compare</span><span class="p">(</span><span class="n">pt_oe</span><span class="o">=</span><span class="n">pt_oe</span><span class="p">,</span> <span class="n">pr_oe</span><span class="o">=</span><span class="n">pr_oe</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Right then. Here is where things get interesting. Let's take a look at the distribution of <em>parameters</em>, comparing their prior and posterior distributions. This will show us where the parameter adjustment process has ..well...adjusted parameters! (And by how much).</p>
+<p>We will use  <code>pyemu.plot_utils.ensemble_helper()</code> to display histograms of parameter groupings from the prior and posterior ensembles. We could display histograms of each parameter group by passing a dictionary of parameter group names (you would probably do so in real-world applications). This will result in a pretty large plot, because we have quite  a few parameter groups. </p>
+<p>For the purposes of this tutorial, let's instead group parameters a bit more coarsely and just lump all parameters of the same hydraulic property together. The function in the next cell groups parameters that share the first three letters in the parameter group name:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">group_pdict</span><span class="p">(</span><span class="n">pe_pr</span><span class="p">,</span> <span class="n">pe_pt</span><span class="p">):</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>        <span class="n">par</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>        <span class="n">pdict</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">pst</span><span class="o">.</span><span class="n">par_groups</span><span class="p">:</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>                <span class="n">prefix</span><span class="o">=</span> <span class="n">string</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#set first 3 letters as prefix</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>                <span class="k">if</span> <span class="n">prefix</span><span class="o">==</span><span class="s1">&#39;nel&#39;</span><span class="p">:</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>                        <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;porosity&#39;</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>                <span class="n">group</span> <span class="o">=</span> <span class="n">pdict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="p">[])</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>                <span class="n">parnames</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">par</span><span class="o">.</span><span class="n">pargp</span><span class="o">==</span><span class="n">string</span><span class="p">,</span> <span class="s1">&#39;parnme&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>                <span class="n">group</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">parnames</span><span class="p">)</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>        <span class="k">return</span> <span class="n">pdict</span>
+</span></code></pre></div>
+<p>Now, read in the parameter ensembles from the initial (prior) and last (posterior) PEST++IES iteration. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">pe_pr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">org_t_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.0.par.csv&quot;</span><span class="p">),</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">pe_pt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">org_t_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.</span><span class="si">{0}</span><span class="s2">.par.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="p">)),</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Let's create a dictionary of parameters "groupings" using the function we prepared above:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">pdict</span> <span class="o">=</span> <span class="n">group_pdict</span><span class="p">(</span><span class="n">pe_pr</span><span class="p">,</span> <span class="n">pe_pt</span><span class="p">)</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1"># for example:</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">pdict</span><span class="p">[</span><span class="s1">&#39;npf&#39;</span><span class="p">][:</span><span class="mi">5</span><span class="p">]</span>
+</span></code></pre></div>
+<p>We can now plot histograms for each of our parameter groupings in the <code>pdict</code> dictionary. The grey and blue bars are the prior and posterior parameter distribution, respectively. Where the blue bars have shifted away from the grey bars marks parameters which have been updated during history matching.</p>
+<p>Now, this is a pretty coarse check. But it does allow us to pick up on parameters that are changing...but which shouldn't. Take porosity parameters for example (the panel on the second row on the right: <code>D)porosity</code>). Our observation data set is only composed of groundwater levels and stream gage measurements. Neither of these types of measurements contain information which should inform porosity. In other words, porosity parameters should be insensitive to history matching. However, PEST++IES has adjusted them from their prior values. A clear sign of spurious correlation. And if it's happening for porosity, who's to say it isn't happening for other parameters as well?</p>
+<p>Right then, let's fix this.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">ensemble_helper</span><span class="p">({</span><span class="s2">&quot;0.5&quot;</span><span class="p">:</span><span class="n">pe_pr</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">:</span><span class="n">pe_pt</span><span class="p">},</span><span class="n">plot_cols</span><span class="o">=</span><span class="n">pdict</span><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="simple-temporal-localization-and-common-sense">Simple Temporal Localization (and common sense)<a class="headerlink" href="#simple-temporal-localization-and-common-sense" title="Permanent link">&para;</a></h2>
+<p>As described a the beginning of the notebook, a user can provide PEST++IES with a localization matrix. This matrix explicitly enforces physically-plausible parameter-to-observation relations. Perhaps more importantly it enforces the non-existence of physically implausible relations. This matrix has rows that are observation names and/or observation group names, and columns that are parameter names and/or parameter group names. Elements of the matrix should range between 0.0 and 1.0. </p>
+<p>Right then, let's get started and add some localization. The obvious stuff is temporal localization - scenario parameters can't influence historic observations (and the inverse is true) so let's tell PEST++IES about this.  Also, as discussed, should porosity be adjusted at all given the observations we have? (Not for history matching, but yes, it should be adjusted for forecast uncertainty analysis.)</p>
+<p>This involves several steps:
+ - identify parameter names or parameter group names to specify in the matrix
+ - identify observation names to specify in the matrix
+ - construct a template matrix from the names
+ - assign values to elements of the matrix for each parameter/observation pair</p>
+<p>In this next section, we are going to use good ole' Python and functionality in <code>pyEMU</code> to construct such a matrix. As we constructed our PEST(++) interface using <code>pyemu.PstFrom</code> (see the "pstfrom pest setup" tutorial), we conveniently have lots of useful metadata to draw on and help us process parameters and observations. </p>
+<p>For starters, let's get the <code>parameter_data</code> and <code>observation_data</code> sections from the <code>Pst</code> control file. We are going to use them for some funky slicing and dicing:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># get par data</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">par</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">par</span><span class="o">.</span><span class="n">inst</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">inst</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># get obs data</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">obs</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">observation_data</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">obs</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># temporal units are different in obs and par:</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="n">par</span><span class="o">.</span><span class="n">inst</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="n">obs</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Inconveniently, temporal parameters in <code>par</code> were recorded with the "stress period number" (or <code>kper</code>) instead of model time (see the <code>par.inst</code> column). But the observations in <code>obs</code> were recorded with the model time (see the <code>obs.time</code> column). </p>
+<p>So we need to align these. We could go either way, but it is probably more robust to align to model "time" instead of "stress period number". The next cell updates the <code>par</code> parameter data to include a column with model time that corresponds to the time at the end of the stress period at which the parameter comes into existence.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">rpar</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">par</span><span class="o">.</span><span class="n">parnme</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;recharge&quot;</span><span class="p">),:]</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">rpar</span> <span class="o">=</span> <span class="n">rpar</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rpar</span><span class="o">.</span><span class="n">ptype</span><span class="o">==</span><span class="s2">&quot;cn&quot;</span><span class="p">,:]</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rpar</span><span class="o">.</span><span class="n">parnme</span><span class="p">,</span><span class="s2">&quot;inst&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rpar</span><span class="o">.</span><span class="n">parnme</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;tcn&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># add a column for each stress period; </span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1"># we already have spd values associated to paranetemr names, </span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="c1"># so we will use this to associate parameters to observations in time</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="n">times</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="n">times</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">for</span> <span class="n">kper</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">par</span><span class="o">.</span><span class="n">inst</span><span class="o">==</span><span class="nb">int</span><span class="p">(</span><span class="n">kper</span><span class="p">),</span> <span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rpar</span><span class="o">.</span><span class="n">parnme</span><span class="p">,[</span><span class="s2">&quot;inst&quot;</span><span class="p">,</span><span class="s2">&quot;time&quot;</span><span class="p">]]</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">times</span>
+</span></code></pre></div>
+<p>After tiding that up, let's start preparing the parameter names (or parameter group names; PEST++IES accepts either) that we are gong to use as columns in the localization matrix. </p>
+<p>Let's start off with the easy ones: static parameters. These are parameters which do not vary in time. Let's assume we cannot effectively rule out correlation between them and observations purely based on the time at which the observation occurs. (So things like hydraulic conductivity, storage, SFR conductance, etc.) Let's make a list of parameter group names for these types of parameters:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># static parameters; these parameters will all be informed by historic observation data</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;npf&#39;</span><span class="p">,</span> <span class="s1">&#39;sto&#39;</span><span class="p">,</span> <span class="s1">&#39;icstrt&#39;</span><span class="p">,</span> <span class="s1">&#39;ghb&#39;</span><span class="p">,</span> <span class="s1">&#39;sfrcondgr&#39;</span><span class="p">,</span><span class="s1">&#39;sfrcondcn&#39;</span><span class="p">]</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">static_pargps</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pst</span><span class="o">.</span><span class="n">par_groups</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">prefixes</span><span class="p">)]</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># start making the list of localization matrix column names (i.e. parameter or parameter group names)</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="c1"># as we dont need to do any further processing for the loc matrix, we can just use parameter group names</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="n">loc_matrix_cols</span> <span class="o">=</span> <span class="n">static_pargps</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span></code></pre></div>
+<p>OK, so we keep going on about porosity not being informed by the data. So let's give it special attention. Let's make a list of parameter groups which should not be adjusted:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># should we really be adjusting porosity? lets just make a list to use later on</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ne&#39;</span><span class="p">]</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">dont_pargps</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pst</span><span class="o">.</span><span class="n">par_groups</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">prefixes</span><span class="p">)]</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># keep building up our column name list</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="n">loc_matrix_cols</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dont_pargps</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Lastly, let us make a list of parameter <em>names</em> (not group names!) for parameters which vary over time. Why parameter <em>names</em> and not parameter <em>group names</em>? Because some of these (namely the <code>wel</code> and <code>sfrgr</code> groups) have parameters <em>within</em> a group which pertain to different model times. So we need to drill down to explicitly assign values to specific parameters. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># temporal pars; parameters in the past cannot be informed by observations in the future</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="c1"># so, an observation in stress period 2 cannot inform a rechange parameter in stress period 1, and so on...</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wel&#39;</span><span class="p">,</span> <span class="s1">&#39;rch&#39;</span><span class="p">,</span> <span class="s1">&#39;sfrgr&#39;</span><span class="p">]</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="n">temp_pargps</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pst</span><span class="o">.</span><span class="n">par_groups</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">prefixes</span><span class="p">)]</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="n">temporal_pars</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">par</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;gr&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">parnme</span> <span class="ow">and</span> <span class="s2">&quot;pp&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">parnme</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>                                          <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">pargp</span> <span class="ow">in</span> <span class="n">temp_pargps</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="c1"># for the localization matrix we are going to need to go parameter by parameter, so lets get the list of parameter _names_</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="c1">#temporal_pars = par.loc[par.pargp.isin(temp_pargps)] = [t for t in temporal pars if gr]</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="c1"># extend the column name list</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="n">loc_matrix_cols</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">temporal_pars</span><span class="o">.</span><span class="n">parnme</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</span></code></pre></div>
+<p>Right'o. So now we have a list of parameter group and parameter names which we are going to use to construct our localization matrix: <code>loc_matrix_cols</code>. We also have a couple of sub-lists to help us select specific columns form the matrix after we have constructed it (<code>static_pargps</code>, <code>dont_pargps</code> and <code>temporal_pars</code>).</p>
+<p>Obviously, we also have the list of observations to use as rows in the matrix - they are simply all the non-zero observations in the <code>pst</code> control file: <code>pst.nnz_obs_names</code>.</p>
+<p>Let's get cooking! Generate a <code>Matrix</code> using the <code>pyemu.Matrix</code> class and then convert it <code>to_dataframe()</code> for easy manipulation:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># generate a Matrix object with the nz_obs names as rows and parameters/par groups as columns:</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">loc</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">from_names</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">nnz_obs_names</span><span class="p">,</span><span class="n">loc_matrix_cols</span><span class="p">)</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="c1"># just to make sure, set every cell/element to zero</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,:]</span><span class="o">=</span> <span class="mf">0.0</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="n">loc</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>OK, now we have the startings of a localization matrix. At this moment, every element is assigned a value of 0.0 (e.g. no parameter-to-observation correlation). We will now go through and assign a value of 1.0 to parameter-observation pairs for which a physically plausible relation might exist.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># we can now proceed to assign values to elements of the matrix</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="c1"># assign a value of 1 to all rows for the static parameters, as they may be informed by all observations</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="n">loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">static_pargps</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># see what that looks like</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="n">loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">static_pargps</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Here comes the tricky bit - assigning localization for time-dependent parameters. We are going to say that an observation can <em>only</em> inform parameters that are up to 180 days in the past (e.g. 180 days before the observation). </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># here comes the tricky bit, assigning localization for time-dependent parameters</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="c1"># we are going to say that an observation can _only_ inform parameters that are </span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="c1"># up to 180 days into the past; not in the future. Parameters that are beyond the historic period are not informed by observations</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="n">nz_obs</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">observation_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pst</span><span class="o">.</span><span class="n">nnz_obs_names</span><span class="p">,:]</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="n">cutoff</span> <span class="o">=</span> <span class="mi">180</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="n">times</span> <span class="o">=</span> <span class="n">nz_obs</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="n">times</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">times</span><span class="p">:</span>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>    <span class="n">kper_obs_names</span> <span class="o">=</span> <span class="n">nz_obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">nz_obs</span><span class="o">.</span><span class="n">time</span><span class="o">==</span><span class="n">time</span><span class="p">]</span><span class="o">.</span><span class="n">obsnme</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>    <span class="c1"># get pars from the same kper and up to -180 days backward in time</span>
+</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>    <span class="n">kper_par_names</span> <span class="o">=</span> <span class="n">temporal_pars</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temporal_pars</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="n">time</span><span class="o">-</span><span class="n">cutoff</span> <span class="ow">and</span> <span class="n">x</span><span class="o">&lt;=</span><span class="n">time</span><span class="p">)]</span><span class="o">.</span><span class="n">parnme</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>    <span class="c1"># update the loc matrix</span>
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>    <span class="n">loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">kper_obs_names</span><span class="p">,</span> <span class="n">kper_par_names</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="c1"># see what that looks like:</span>
+</span><span id="__span-24-15"><a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="n">loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">kper_obs_names</span><span class="p">,</span> <span class="n">kper_par_names</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="n">_</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+</span></code></pre></div>
+<p>OK! We should be good to go. Just a quick to check to see if we messed something up:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># make sure haven&#39;t done something silly</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="k">assert</span> <span class="n">loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">dont_pargps</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span>
+</span></code></pre></div>
+<p>All good? Excellent. Let's rebuild the <code>Matrix</code> (don't tell Neo) and then write it to an external file named <code>loc.mat</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span><span class="o">.</span><span class="n">to_ascii</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span><span class="s2">&quot;loc.mat&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Almost done! We need to tell PEST++IES what file to read. We do so by specifying the file name in the <code>ies_localizer()</code> PEST++ control variable:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="p">[</span><span class="s2">&quot;ies_localizer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;loc.mat&quot;</span>
+</span></code></pre></div>
+<p>Don't forget to re-write the control file!</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="p">[</span><span class="s2">&quot;ies_num_reals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span> <span class="c1"># in theory, with localization we can get by with less reals...lets see!</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_mf6.pst&#39;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>OK, good to go. As usual, make sure to specify the number of workers that your machine can cope with. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">num_workers</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1">#update this according to your resources</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="n">m_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;master_ies_2&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">os_utils</span><span class="o">.</span><span class="n">start_workers</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span> <span class="c1"># the folder which contains the &quot;template&quot; PEST dataset</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>                            <span class="s1">&#39;pestpp-ies&#39;</span><span class="p">,</span> <span class="c1">#the PEST software version we want to run</span>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>                            <span class="s1">&#39;freyberg_mf6.pst&#39;</span><span class="p">,</span> <span class="c1"># the control file to use with PEST</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>                            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="c1">#how many agents to deploy</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>                            <span class="n">worker_root</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="c1">#where to deploy the agent directories; relative to where python is running</span>
+</span><span id="__span-32-6"><a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>                            <span class="n">master_dir</span><span class="o">=</span><span class="n">m_d</span><span class="p">,</span> <span class="c1">#the manager directory</span>
+</span><span id="__span-32-7"><a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>                            <span class="p">)</span>
+</span></code></pre></div>
+<h3 id="temporal-localization-outcomes">Temporal Localization Outcomes<a class="headerlink" href="#temporal-localization-outcomes" title="Permanent link">&para;</a></h3>
+<p>By now you should be familiar with the next few plots. Let's blast through our plots of timeseries, forecast histograms and parameter distributions.</p>
+<p>Start with the parameter changes. Hey whadya know! That looks a bit more reasonable, doesn't it? Porosity parameters no longer change from the prior to the posterior. Variance for temporal parameters has also changed. Excellent. At least we've removed <em>some</em> potential for underestimating forecast uncertainty. Next check what this has done for history matching and, more importantly, the forecasts.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="n">pe_pr_tloc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.0.par.csv&quot;</span><span class="p">),</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="n">pe_pt_tloc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.</span><span class="si">{0}</span><span class="s2">.par.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="p">)),</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="n">pdict</span> <span class="o">=</span> <span class="n">group_pdict</span><span class="p">(</span><span class="n">pe_pr_tloc</span><span class="p">,</span> <span class="n">pe_pt_tloc</span><span class="p">)</span>
+</span><span id="__span-33-5"><a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">ensemble_helper</span><span class="p">({</span><span class="s2">&quot;0.5&quot;</span><span class="p">:</span><span class="n">pe_pr_tloc</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">:</span><span class="n">pe_pt_tloc</span><span class="p">},</span><span class="n">plot_cols</span><span class="o">=</span><span class="n">pdict</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Ok!  Now we see that the porosity parameters are unchanged - just like we wanted!  Do you think this will effect the travel time forecast???</p>
+<p>Now read in the new posterior observation ensemble.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="n">pt_oe_tloc</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">ObservationEnsemble</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">pst</span><span class="o">=</span><span class="n">pst</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.</span><span class="si">{0}</span><span class="s2">.obs.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="p">)))</span>
+</span></code></pre></div>
+<p>Still getting relatively decent (although not <em>as</em> good as before) fits  with historical data.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_tseries_ensembles</span><span class="p">(</span><span class="n">pr_oe</span><span class="p">,</span> <span class="n">pt_oe_tloc</span><span class="p">,</span><span class="n">noise</span><span class="p">,</span> <span class="n">onames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hds&quot;</span><span class="p">,</span><span class="s2">&quot;sfr&quot;</span><span class="p">])</span>
+</span></code></pre></div>
+<p>What's happened with our ever important forecasts? </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_forecast_hist_compare</span><span class="p">(</span><span class="n">pt_oe</span><span class="o">=</span><span class="n">pt_oe_tloc</span><span class="p">,</span> <span class="n">pr_oe</span><span class="o">=</span><span class="n">pr_oe</span><span class="p">,</span> <span class="n">last_pt_oe</span><span class="o">=</span><span class="n">pt_oe</span><span class="p">,</span> <span class="n">last_prior</span><span class="o">=</span><span class="n">pr_oe</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Ok, much wider posterior distributions, but that could also be from a larger posterior objective function. In any event, much improvement...</p>
+<h2 id="distance-based-localization">Distance Based Localization<a class="headerlink" href="#distance-based-localization" title="Permanent link">&para;</a></h2>
+<p>This is industrial strength localization that combines the temporal localization from before with a distance-based cutoff between each spatially-distributed parameter type and each spatially-discrete observation.  In this way, we are defining a "window" around each observation and only parameters that are within this window are allowed to be conditioned from said observation.  It's painful to setup and subjective (since a circular windows around each observation is a coarse approximation) but in practice, it seems to yield robust forecast estimates.</p>
+<p>For the first time now, we will be using a fully-localized solve, meaning each parameter is upgraded independently.  This means PEST++IES has to run through the upgrade calculations once for each parameter - this can be very slow.  Currently, PESTPP-IES can multithread these calculations but the optimal number of threads is very problem specific.  Through testing, 3 threads seems to be a good choice for this problem (the PEST++IES log file records the time it takes to solve groups of 1000 pars for each lambda so you can test for your problem too).</p>
+<p>In the next few cells we are going to make use of <code>flopy</code> and some of the metadata that <code>pyemu.PstFrom</code> recorded when constructing our PEST(++) setup to calculate distances between parameters and observations. We will do this only for groundwater level observations.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="c1"># load simulation</span>
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="n">sim</span> <span class="o">=</span> <span class="n">flopy</span><span class="o">.</span><span class="n">mf6</span><span class="o">.</span><span class="n">MFSimulation</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sim_ws</span><span class="o">=</span><span class="n">t_d</span><span class="p">,</span> <span class="n">verbosity_level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="c1"># load flow model</span>
+</span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="n">gwf</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+</span></code></pre></div>
+<p>All of our head observation names conveniently contain the layer, row and column number. This allows us to use <code>flopy</code> to obtain their <code>x</code> and <code>y</code> coordinate:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="c1"># start by getting the locations of observation sites</span>
+</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="c1"># we will only do this for head observations; other obs types in our PEST dataset aren&#39;t applicable</span>
+</span><span id="__span-38-3"><a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="n">hobs</span> <span class="o">=</span> <span class="n">nz_obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">nz_obs</span><span class="o">.</span><span class="n">oname</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;hds&#39;</span><span class="p">,</span><span class="s1">&#39;hdsvd&#39;</span><span class="p">,</span><span class="s1">&#39;hdstd&#39;</span><span class="p">])]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-38-4"><a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="n">hobs</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;i&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hobs</span><span class="o">.</span><span class="n">obgnme</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span>
+</span><span id="__span-38-5"><a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a><span class="n">hobs</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;j&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hobs</span><span class="o">.</span><span class="n">obgnme</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+</span><span id="__span-38-6"><a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="c1"># get x,y for cell of each obs</span>
+</span><span id="__span-38-7"><a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="n">hobs</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hobs</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">gwf</span><span class="o">.</span><span class="n">modelgrid</span><span class="o">.</span><span class="n">xcellcenters</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">i</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">j</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-38-8"><a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a><span class="n">hobs</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hobs</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">gwf</span><span class="o">.</span><span class="n">modelgrid</span><span class="o">.</span><span class="n">ycellcenters</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">i</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">j</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-38-9"><a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a><span class="c1"># group them for use later in identifying unique locations</span>
+</span><span id="__span-38-10"><a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a><span class="n">hobs</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s2">&quot;xy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hobs</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-38-11"><a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a><span class="n">hobs</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>We have the <code>x</code> and <code>y</code> coordinate of all grid and pilot point based parameters recorded in the <code>Pst</code> <code>parameter_data</code> section. Convenient.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="n">par</span><span class="o">.</span><span class="n">x</span><span class="o">=</span><span class="n">par</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="n">par</span><span class="o">.</span><span class="n">y</span><span class="o">=</span><span class="n">par</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</span><span id="__span-39-3"><a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="n">par</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>First, create a <code>Matrix</code> for <em>all</em> adjustable parameter <em>names</em> and non-zero observations:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="n">spatial_loc</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">from_names</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">nnz_obs_names</span><span class="p">,</span><span class="n">pst</span><span class="o">.</span><span class="n">adj_par_names</span><span class="p">)</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="c1"># set all elements to 1.0 to make sure all observation-parameter pairs are &quot;active&quot;</span>
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="n">spatial_loc</span><span class="o">.</span><span class="n">values</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">1.0</span>
+</span></code></pre></div>
+<p>Now the tricky bit. We are going to go through each observation location and assign 0.0 to rows that correspond to <em>spatially distributed</em> parameters that are further away than a specified cutoff distance (<code>loc_dist</code>). </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="c1"># the cutoff distance</span>
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="n">loc_dist</span> <span class="o">=</span> <span class="mf">5000.0</span>
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="c1"># prepare a set of adjustable parameter names</span>
+</span><span id="__span-41-4"><a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a><span class="n">sadj</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">adj_par_names</span><span class="p">)</span>
+</span><span id="__span-41-5"><a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="c1">#select only spatial params to avoid applying to layer-wide multiplier parameters</span>
+</span><span id="__span-41-6"><a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a><span class="n">spatial_par</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">par</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-41-7"><a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a><span class="c1"># group obs by location</span>
+</span><span id="__span-41-8"><a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a><span class="n">xy_groups</span> <span class="o">=</span> <span class="n">hobs</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;xy&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">groups</span>
+</span><span id="__span-41-9"><a id="__codelineno-41-9" name="__codelineno-41-9" href="#__codelineno-41-9"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of observation sites:&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">xy_groups</span><span class="p">))</span>
+</span><span id="__span-41-10"><a id="__codelineno-41-10" name="__codelineno-41-10" href="#__codelineno-41-10"></a><span class="c1"># loop through each observation site and &quot;blank out&quot; correlation with parameters which are too far away</span>
+</span><span id="__span-41-11"><a id="__codelineno-41-11" name="__codelineno-41-11" href="#__codelineno-41-11"></a><span class="k">for</span> <span class="n">xy</span><span class="p">,</span><span class="n">onames</span> <span class="ow">in</span> <span class="n">xy_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-41-12"><a id="__codelineno-41-12" name="__codelineno-41-12" href="#__codelineno-41-12"></a>    <span class="c1"># get the obs site x and y coords</span>
+</span><span id="__span-41-13"><a id="__codelineno-41-13" name="__codelineno-41-13" href="#__codelineno-41-13"></a>    <span class="n">oname</span> <span class="o">=</span> <span class="n">onames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-41-14"><a id="__codelineno-41-14" name="__codelineno-41-14" href="#__codelineno-41-14"></a>    <span class="n">xx</span><span class="p">,</span><span class="n">yy</span> <span class="o">=</span> <span class="n">hobs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">oname</span><span class="p">,[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+</span><span id="__span-41-15"><a id="__codelineno-41-15" name="__codelineno-41-15" href="#__codelineno-41-15"></a>    <span class="c1"># calculate distance from obs to parameters</span>
+</span><span id="__span-41-16"><a id="__codelineno-41-16" name="__codelineno-41-16" href="#__codelineno-41-16"></a>    <span class="n">spatial_par</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;dist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spatial_par</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">xx</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">yy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">)</span>
+</span><span id="__span-41-17"><a id="__codelineno-41-17" name="__codelineno-41-17" href="#__codelineno-41-17"></a>    <span class="c1"># select pars that are too far from obs</span>
+</span><span id="__span-41-18"><a id="__codelineno-41-18" name="__codelineno-41-18" href="#__codelineno-41-18"></a>    <span class="n">too_far</span> <span class="o">=</span> <span class="n">spatial_par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">spatial_par</span><span class="o">.</span><span class="n">dist</span> <span class="o">&gt;</span> <span class="n">loc_dist</span><span class="p">,</span><span class="s2">&quot;parnme&quot;</span><span class="p">]</span>
+</span><span id="__span-41-19"><a id="__codelineno-41-19" name="__codelineno-41-19" href="#__codelineno-41-19"></a>    <span class="c1"># keep only adjustable pars</span>
+</span><span id="__span-41-20"><a id="__codelineno-41-20" name="__codelineno-41-20" href="#__codelineno-41-20"></a>    <span class="n">too_far</span> <span class="o">=</span> <span class="n">too_far</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">too_far</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sadj</span><span class="p">)]</span>
+</span><span id="__span-41-21"><a id="__codelineno-41-21" name="__codelineno-41-21" href="#__codelineno-41-21"></a>    <span class="c1"># assign zero to loc matrix for parameters that are too far from obs</span>
+</span><span id="__span-41-22"><a id="__codelineno-41-22" name="__codelineno-41-22" href="#__codelineno-41-22"></a>    <span class="n">spatial_loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">onames</span><span class="p">,</span> <span class="n">too_far</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+</span></code></pre></div>
+<p>Now we need to update that with the temporal localization we prepared earlier:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="c1"># update the the loc matrix with temporal localization that we prepared previously</span>
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="n">temporal_parnames</span> <span class="o">=</span> <span class="n">temporal_pars</span><span class="o">.</span><span class="n">parnme</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="n">spatial_loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">loc</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">temporal_parnames</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">temporal_parnames</span><span class="p">]</span>
+</span><span id="__span-42-4"><a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="c1"># make sure the porosity pars are not; go down to parname level to make sure </span>
+</span><span id="__span-42-5"><a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="n">dont_pars</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">par</span><span class="o">.</span><span class="n">pargp</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dont_pargps</span><span class="p">),</span><span class="s2">&quot;parnme&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</span><span id="__span-42-6"><a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a><span class="n">spatial_loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">dont_pars</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+</span></code></pre></div>
+<p>Always good to throw in some checks to make sure we aren't missing something:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="n">spatial_loc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">spatial_loc</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;:ne&#39;</span> <span class="ow">in</span> <span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Right then. Rebuild the <code>Matrix</code> from the dataframe, write it to an external file and update the relevant PEST++ option:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span><span class="n">spatial_loc</span><span class="p">)</span><span class="o">.</span><span class="n">to_coo</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span><span class="s2">&quot;spatial_loc.jcb&quot;</span><span class="p">))</span>
+</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="p">[</span><span class="s2">&quot;ies_localizer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;spatial_loc.jcb&quot;</span>
+</span></code></pre></div>
+<p>A final consideration. </p>
+<p>Through localization, a complex parameter estimation problem can be turned into a series of independent parameter estimation problems. If large numbers of parameters are being adjusted, the parameter upgrade calculation process for a given lambda will require as many truncated SVD solves as there are adjustable parameters. This can require considerable numerical effort. To overcome this problem, the localized upgrade solution process in PESTP++IES has been multithreaded; this is possible in circumstances such as these where each local solve is independent of every other local solve. The use of multiple threads is invoked through the <code>ies_num_threads()</code> control variable. It should be noted that the optimal number of threads to use is  problem-specific. Furthermore, it should not exceed the number of physical cores of the host machine on which the PEST++IES master instance is running.</p>
+<p>However, the fully localized solve is still sssslllloooooowwwwwww.  So if you have heaps of parameters (&gt;30,000 say) it may actually be faster to use more realizations rather than use localization in terms of wall time - more realizations will over come the issues related to spurious correlation simply by having more samples to calculate the empirical derivatives with...but this depends on the runtime of the forward model as well. As usual, the answer is: "It depends" - haha!</p>
+<p>Just to make this notebook experience more enjoyable, lets limit the number of lambdas being tested (so that we only have to solve the fully localized solution once per iteration...):</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="p">[</span><span class="s2">&quot;ies_lambda_mults&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+</span></code></pre></div>
+<p>Rewrite the control file and deploy PEST++IES:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.pst&quot;</span><span class="p">))</span>
+</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="n">m_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;master_ies_3&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">os_utils</span><span class="o">.</span><span class="n">start_workers</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span> <span class="c1"># the folder which contains the &quot;template&quot; PEST dataset</span>
+</span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>                            <span class="s1">&#39;pestpp-ies&#39;</span><span class="p">,</span> <span class="c1">#the PEST software version we want to run</span>
+</span><span id="__span-47-3"><a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a>                            <span class="s1">&#39;freyberg_mf6.pst&#39;</span><span class="p">,</span> <span class="c1"># the control file to use with PEST</span>
+</span><span id="__span-47-4"><a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a>                            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="c1">#how many agents to deploy</span>
+</span><span id="__span-47-5"><a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a>                            <span class="n">worker_root</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="c1">#where to deploy the agent directories; relative to where python is running</span>
+</span><span id="__span-47-6"><a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a>                            <span class="n">master_dir</span><span class="o">=</span><span class="n">m_d</span><span class="p">,</span> <span class="c1">#the manager directory</span>
+</span><span id="__span-47-7"><a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a>                            <span class="p">)</span>
+</span></code></pre></div>
+<h3 id="spatial-localization-outcomes">Spatial Localization Outcomes<a class="headerlink" href="#spatial-localization-outcomes" title="Permanent link">&para;</a></h3>
+<p>You know the drill by now. Let's look at our parameter and observation distributions. </p>
+<p>Starting with the parameters. Perhaps a bit less change. Hard to tell at this scale. What about the observations?</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="n">pe_pr_sloc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.0.par.csv&quot;</span><span class="p">),</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-48-2"><a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="n">pe_pt_sloc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.</span><span class="si">{0}</span><span class="s2">.par.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="p">)),</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-48-3"><a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a>
+</span><span id="__span-48-4"><a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a><span class="n">pdict</span> <span class="o">=</span> <span class="n">group_pdict</span><span class="p">(</span><span class="n">pe_pr_sloc</span><span class="p">,</span> <span class="n">pe_pt_sloc</span><span class="p">)</span>
+</span><span id="__span-48-5"><a id="__codelineno-48-5" name="__codelineno-48-5" href="#__codelineno-48-5"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">ensemble_helper</span><span class="p">({</span><span class="s2">&quot;0.5&quot;</span><span class="p">:</span><span class="n">pe_pr_sloc</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">:</span><span class="n">pe_pt_sloc</span><span class="p">},</span><span class="n">plot_cols</span><span class="o">=</span><span class="n">pdict</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Read in the new posterior ensemble:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="n">pt_oe_sloc</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">ObservationEnsemble</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">pst</span><span class="o">=</span><span class="n">pst</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.</span><span class="si">{0}</span><span class="s2">.obs.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="p">)))</span>
+</span></code></pre></div>
+<p>In this case, fits are similar to with the temporal localization:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_tseries_ensembles</span><span class="p">(</span><span class="n">pr_oe</span><span class="p">,</span> <span class="n">pt_oe_sloc</span><span class="p">,</span><span class="n">noise</span><span class="p">,</span> <span class="n">onames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hds&quot;</span><span class="p">,</span><span class="s2">&quot;sfr&quot;</span><span class="p">])</span>
+</span></code></pre></div>
+<p>And the ever important forecasts. Again, a bit more variance in the null-space dependent forecasts (i.e. particle travel time).</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_forecast_hist_compare</span><span class="p">(</span><span class="n">pt_oe</span><span class="o">=</span><span class="n">pt_oe_sloc</span><span class="p">,</span> <span class="n">pr_oe</span><span class="o">=</span><span class="n">pr_oe</span><span class="p">,</span> <span class="n">last_pt_oe</span><span class="o">=</span><span class="n">pt_oe_tloc</span><span class="p">,</span> <span class="n">last_prior</span><span class="o">=</span><span class="n">pr_oe</span><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="pesties-with-automatic-adaptive-localization">PEST++IES with Automatic Adaptive Localization<a class="headerlink" href="#pesties-with-automatic-adaptive-localization" title="Permanent link">&para;</a></h2>
+<p>PEST++IES includes functionality for automatic localization.  In practice, this form of localization doesn't resolve the level of localization that more rigorous explicit localization that you get through a localization matrix.  However, its better than no localization at all. </p>
+<p>A localization matrix supplied by the user can be used in combination with automatic adaptive localization (autoadaloc). When doing so, autoadaloc process is restricted to to the allowed parameter-to-observation relations in the user specified localization matrix. The automated process will only ever adjust values in the localization matrix downwards (i.e. decrease the correlation coefficients).</p>
+<p>And, just like par-by-par distance based localization above, we  need to solve the upgrade equations once for each parameter...this can take quite a bit of CPU time. Multithreading is a must.</p>
+<p>How do we implement it? Easy peasy. Just activate the <code>ies_autoadaloc()</code> PEST++ option:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="c1">#pst.pestpp_options.pop(&quot;ies_localizer&quot;) #should you wish to try autoadaloc on its own, simply drop the loc matrix</span>
+</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="p">[</span><span class="s2">&quot;ies_autoadaloc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a><span class="c1"># these upgrade calcs take a while, so let&#39;s only do one lambda</span>
+</span><span id="__span-53-2"><a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="p">[</span><span class="s2">&quot;ies_lambda_mults&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+</span></code></pre></div>
+<p>The one control value for <code>autoadaloc</code> is <code>ies_autoadaloc_sigma_distance</code> which is the statistical difference background or error correlation estimate and the current correlation coefficient.  Any correlation coefficient that is less than the error mean plus/minus error standard deviation times <code>ies_autoadaloc_sigma_distance</code> is treated as a non-significant correlation and is localized out. So large <code>ies_autoadaloc_sigma_distance</code> values result in stronger localization.  The default value is 1.0. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="p">[</span><span class="s2">&quot;ies_autoadaloc_sigma_dist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span></code></pre></div>
+<p>Cool beans. We are good to go. Just re-write the control file and let PEST++IES loose. Now, keep in mind that, even though we are using only a few hundred model runs, solving the parameter upgrade equations for a high-dimensional problem can be quite expensive. So this will take  bit longer than previous runs.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.pst&quot;</span><span class="p">))</span>
+</span><span id="__span-55-2"><a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a><span class="n">m_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;master_ies_3&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">os_utils</span><span class="o">.</span><span class="n">start_workers</span><span class="p">(</span><span class="n">t_d</span><span class="p">,</span> <span class="c1"># the folder which contains the &quot;template&quot; PEST dataset</span>
+</span><span id="__span-56-2"><a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a>                            <span class="s1">&#39;pestpp-ies&#39;</span><span class="p">,</span> <span class="c1">#the PEST software version we want to run</span>
+</span><span id="__span-56-3"><a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a>                            <span class="s1">&#39;freyberg_mf6.pst&#39;</span><span class="p">,</span> <span class="c1"># the control file to use with PEST</span>
+</span><span id="__span-56-4"><a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a>                            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="c1">#how many agents to deploy</span>
+</span><span id="__span-56-5"><a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a>                            <span class="n">worker_root</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="c1">#where to deploy the agent directories; relative to where python is running</span>
+</span><span id="__span-56-6"><a id="__codelineno-56-6" name="__codelineno-56-6" href="#__codelineno-56-6"></a>                            <span class="n">master_dir</span><span class="o">=</span><span class="n">m_d</span><span class="p">,</span> <span class="c1">#the manager directory</span>
+</span><span id="__span-56-7"><a id="__codelineno-56-7" name="__codelineno-56-7" href="#__codelineno-56-7"></a>                            <span class="p">)</span>
+</span></code></pre></div>
+<h3 id="autoadaloc-outcomes">AutoAdaLoc Outcomes<a class="headerlink" href="#autoadaloc-outcomes" title="Permanent link">&para;</a></h3>
+<p>Right, let's go straight for our forecasts!</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="n">pt_oe_autoloc</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">ObservationEnsemble</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">pst</span><span class="o">=</span><span class="n">pst</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_mf6.</span><span class="si">{0}</span><span class="s2">.obs.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="p">)))</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_forecast_hist_compare</span><span class="p">(</span><span class="n">pt_oe</span><span class="o">=</span><span class="n">pt_oe_autoloc</span><span class="p">,</span> 
+</span><span id="__span-58-2"><a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a>                                <span class="n">pr_oe</span><span class="o">=</span><span class="n">pr_oe</span><span class="p">,</span> 
+</span><span id="__span-58-3"><a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a>                                <span class="n">last_pt_oe</span><span class="o">=</span><span class="n">pt_oe_sloc</span><span class="p">,</span> 
+</span><span id="__span-58-4"><a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a>                                <span class="n">last_prior</span><span class="o">=</span><span class="n">pr_oe</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Thus far we have implemented localization, a strategy to tackle spurious parameter-to-observation correlation. In doing so we reduce the potential for "ensemble collapse", a fancy term that means an "underestimate of forecast uncertainty caused by artificial parameter-to-observation relations". This solves history-matching induced through using ensemble based methods, but it does not solve a (the?) core issue - trying to "perfectly" fit data with an imperfect model will induce bias. </p>
+<p>Now, as we have seen, for some forecasts this is not a huge problem (these are data-driven forecasts, which are well informed by available observation data). For others, it is (these are the forecasts which are influenced by parameter combinations in the null space, that are not informed by observation data). But when undertaking modelling in the real world, we will rarely know where our forecast lies on that spectrum (probably somewhere in the middle...).  So, better safe than sorry.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <!-- Footer -->
+<footer class="md-footer">
+
+    <!-- Link to previous and/or next page -->
+    
+  
+    <!-- Further information -->
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+  
+        <!-- Social links -->
+        
+
+        
+        <!-- Repository information -->
+        
+            <a href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    In-For-Disaster-Analytics/GMDSI_notebooks
+  </div>
+</a>
+        
+      </div>
+    </div>
+  </footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.code.select", "header.autohide", "navigation.expand", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

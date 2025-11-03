@@ -1,0 +1,1857 @@
+<!-- Elements added to "main.html" will be displayed on all pages -->
+ 
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Information in support of the Groundwater Decision Support Modeling tutorials. (Forked Repo)
+Hugman, R., White, J.T., Fienen, M.N., and Hunt, R.J., 2022, Parameter Estimation, Uncertainty Analysis, and Optimization with the PEST++ Family of codes: Tutorial Jupyter Notebooks: U.S. Geological Survey data release, https://doi.org/10.5066/P901F9G0.">
+      
+      
+        <meta name="author" content="GMDSI Team">
+      
+      
+        <link rel="canonical" href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks/part1/freyberg_pilotpoints_1_setup/">
+      
+      
+        <link rel="prev" href="../freyberg_glm_response_surface/">
+      
+      
+        <link rel="next" href="../freyberg_pilotpoints_2_run/">
+      
+      
+      <link rel="icon" href="https://cdn.jsdelivr.net/gh/TACC/Core-CMS-Custom@813aa7c/ptdatax_assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>Spatial Parameterisation with Pilot Points - setup - Groundwater Modeling Decision Support</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family='Benton+Sans',+'Open+Sans':300,300i,400,400i,700,700i%7CRoboto:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"'Benton Sans', 'Open Sans'";--md-code-font:"Roboto"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/tacc.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pilot-points-setup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Determine classes -->
+
+
+  
+
+
+<!-- Header -->
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav
+    class="md-header__inner md-grid"
+    aria-label="Header"
+  >
+
+    <!-- Link to home -->
+    <a
+      href="../.."
+      title="Groundwater Modeling Decision Support"
+      class="md-header__button md-logo"
+      aria-label="Groundwater Modeling Decision Support"
+      data-md-component="logo"
+    >
+      
+  <img src="../../assets/pt2050/pillar1.svg" alt="logo">
+
+    </a>
+
+    <!-- Button to open drawer -->
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Groundwater Modeling Decision Support
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Spatial Parameterisation with Pilot Points - setup
+            
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Button to open search modal -->
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+
+      <!-- Search interface -->
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    <!-- Color palette toggle -->
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+
+    <!-- User preference: color palette -->    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+
+    <!-- Site language selector -->
+    
+
+
+
+    <!-- Repository information -->
+    <!-- Removed -->
+  </nav>
+
+  <!-- Navigation tabs (sticky) -->
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  GMDSI Tutorial Notebooks
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../intro/" class="md-tabs__link">
+          
+  
+    
+  
+  Selected Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  Theory, Concepts and PEST Mechanics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../part2/" class="md-tabs__link">
+          
+  
+    
+  
+  Decision Support Modelling
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Groundwater Modeling Decision Support" class="md-nav__button md-logo" aria-label="Groundwater Modeling Decision Support" data-md-component="logo">
+      
+  <img src="../../assets/pt2050/pillar1.svg" alt="logo">
+
+    </a>
+    Groundwater Modeling Decision Support
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    In-For-Disaster-Analytics/GMDSI_notebooks
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GMDSI Tutorial Notebooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../intro/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Selected Topics
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Selected Topics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_regression/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Regression
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_pyemu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to pyEMU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_geostatistics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Geostatistics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_bayes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Bayes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_svd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to SVD
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Theory, Concepts and PEST Mechanics
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Theory, Concepts and PEST Mechanics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_trial_and_error/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual Trial-and-Error
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_pest_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST Basics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_k/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automated Calibration with PEST
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_k_and_r/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Calibration with Two Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_k_r_fluxobs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multiple Observation Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_glm_response_surface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GLM and the Objective Function Response Surface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Spatial Parameterisation with Pilot Points - setup
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Spatial Parameterisation with Pilot Points - setup
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Admin
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-pilot-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add pilot points
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Add pilot points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-up-zones-for-where-pilot-points-will-be-interpolated" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set up zones for where pilot points will be interpolated
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-the-model-spatial-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get the model spatial reference
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kriging-factors-and-regularization-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kriging factors and regularization inputs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-lets-create-variogram-and-geostruct-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      First, let's create variogram and GeoStruct objects.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#back-to-linking-pilot-points-to-grid-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Back to linking pilot points to grid values
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#foreshadowing-an-aside-on-geostatistics-and-covariance-matrices" class="md-nav__link">
+    <span class="md-ellipsis">
+      (Foreshadowing) An aside on geostatistics and covariance matrices
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-a-control-file-using-these-pilot-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build a control file using these pilot points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-pre-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Pre-Processor
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_pilotpoints_2_run/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spatial Parameterisation with Pilot Points - run
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intro_to_regularization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Regularization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intro_to_fosm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to FOSM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_1_local_sensitivity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Sensitivity and Identifiability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_2_global_sensitivity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Global Sensitivity Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_monte_carlo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monte Carlo
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../part2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Decision Support Modelling
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Decision Support Modelling
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_pstfrom_pest_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Constructing a High-Dimensional PEST Interface with pyEMU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_obs_and_weights/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Observation Values, Weights and Noise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_prior_monte_carlo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prior Monte Carlo
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_glm_1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++GLM - Calculating a Jacobian Matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_fosm_and_dataworth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FOSM and Data Worth
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_glm_2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++GLM - Highly- Parameterized Regularized Inversion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_ies_1_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++IES - Basics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_ies_2_localization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++IES - Localization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_da_prep/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++DA - Getting Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_da_run/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++DA - Sequential Data Assimilation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Admin
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-pilot-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add pilot points
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Add pilot points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-up-zones-for-where-pilot-points-will-be-interpolated" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set up zones for where pilot points will be interpolated
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-the-model-spatial-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get the model spatial reference
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kriging-factors-and-regularization-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kriging factors and regularization inputs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-lets-create-variogram-and-geostruct-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      First, let's create variogram and GeoStruct objects.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#back-to-linking-pilot-points-to-grid-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Back to linking pilot points to grid values
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#foreshadowing-an-aside-on-geostatistics-and-covariance-matrices" class="md-nav__link">
+    <span class="md-ellipsis">
+      (Foreshadowing) An aside on geostatistics and covariance matrices
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-a-control-file-using-these-pilot-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build a control file using these pilot points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-pre-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Pre-Processor
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+
+
+                  
+
+  
+  
+
+
+<h1 id="pilot-points-setup">Pilot Points Setup<a class="headerlink" href="#pilot-points-setup" title="Permanent link">&para;</a></h1>
+<p>Up until this point we have been calibrating the Freyberg model with only two parameters (<code>hk1</code> and <code>rch0</code>). These parameters' values are applied to the entire model domain, not accounting for potential spatial heterogeneity. This is a pretty coarse parameterisation approach.</p>
+<p>In the past (i.e. the dark ages), parameter spatial characterization was often implemented using zones of piece-wise constant values. Such parameterisation schemes were often subjective, inflexible and provide coarse representations of how physical properties vary in space. Parameterisation schemes that rely solely on zones should be treated with caution and/or an understanding of the inherent structural error which they bring with them. We will not be using zone-based approaches in these tutorials.</p>
+<p>Methods of spatial parameterisation based on pilot points reduce these issues. With pilot point based parameterisation, parameter values are assigned to a set of points throughout the model domain rather than the model grid directly. Property values are then assigned to the model grid through spatial interpolation from pilot points. This results in a smooth spatially varying property field. </p>
+<p>This introduces the need for a model pre-processor that handles interpolation from pilot points to the model grid (and assigns values to model input files). The PLPROC suite of software is one option. <code>pyEMU</code> includes python-based alternatives.</p>
+<p>In this notebook we will employ pilot points to parameterize hydraulic conductivity in the Freyberg model discussed in previous tutorials. Here, we will be adding pilot points to an existing pest setup. This may be useful in some cases, specially when dealing with legacy models. However, it may be a non-standard workflow.  The approach demonstrated in this notebook is <strong>not</strong> the recommended approach to construct a highly-parameterized PEST setup with <code>pyEMU</code>. We are using it here simply to maintain a coherent narrative throughout the <code>Part1</code> tutorial notebooks. See <code>Part2</code> of the GMDSI Notebooks for a tutorial on <code>pyemu.PstFrom</code> instead. </p>
+<h3 id="admin">Admin<a class="headerlink" href="#admin" title="Permanent link">&para;</a></h3>
+<p>We have provided some pre-cooked PEST dataset files, wrapped around the modified Freyberg model. This is the same dataset introduced in the "freyberg_pest_setup" and subsequent notebooks. </p>
+<p>The functions in the next cell import required dependencies and prepare a folder for you. This folder contains the model files and a preliminary PEST setup. Run the cells, then inspect the new folder named "freyberg_mf6" which has been created in your tutorial directory. (Just press <code>shift+enter</code> to run the cells). </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span> 
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="p">;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;dependencies&quot;</span><span class="p">))</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pyemu</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="kn">import</span><span class="w"> </span><span class="nn">flopy</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">assert</span> <span class="s2">&quot;dependencies&quot;</span> <span class="ow">in</span> <span class="n">flopy</span><span class="o">.</span><span class="vm">__file__</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="k">assert</span> <span class="s2">&quot;dependencies&quot;</span> <span class="ow">in</span> <span class="n">pyemu</span><span class="o">.</span><span class="vm">__file__</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="kn">import</span><span class="w"> </span><span class="nn">herebedragons</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hbd</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span><span class="mi">10</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># folder containing original model files</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">org_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;models&#39;</span><span class="p">,</span> <span class="s1">&#39;monthly_model_files_1lyr_newstress&#39;</span><span class="p">)</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># a dir to hold a copy of the org model files</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">tmp_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;freyberg_mf6&#39;</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">):</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">org_d</span><span class="p">,</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># get executables</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">hbd</span><span class="o">.</span><span class="n">prep_bins</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># get dependency folders</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">hbd</span><span class="o">.</span><span class="n">prep_deps</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># run our convenience functions to prepare the PEST and model folder</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">hbd</span><span class="o">.</span><span class="n">prep_pest</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Load the PEST control file:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">pst</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Pst</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s1">&#39;freyberg.pst&#39;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Before we get started, just run PEST++ to repeat the last tutorial. We do this to have access to files for comparison.</p>
+<p>As we did in the last tutorial, set <code>rch0</code> parameter transform to <code>log</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">#update parameter transform</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">par</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;rch0&#39;</span><span class="p">,</span> <span class="s1">&#39;partrans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;log&#39;</span>
+</span></code></pre></div>
+<p>Assign weights to the <code>gage-1</code> observations during the calibration period:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">obs</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">observation_data</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">obs</span><span class="o">.</span><span class="n">obgnme</span><span class="o">==</span><span class="s2">&quot;gage-1&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;gage-1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">&lt;=</span><span class="mf">3804.5</span><span class="p">),</span> <span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.05</span>
+</span></code></pre></div>
+<h2 id="add-pilot-points">Add pilot points<a class="headerlink" href="#add-pilot-points" title="Permanent link">&para;</a></h2>
+<p>OK, we currently have the model and PEST(++) setup introduced in the "freyberg k, r and fluxobs" tutorial. We have non-zero weighted head and flux target observations. We have <code>hk1</code> and <code>rch0</code> (hydraulic conductivity and recharge during the calibration period) set as adjustable parameters.</p>
+<p>We will now setup pilot points as a parameterisation device for hydraulic conductivity. There are multiple approaches to implementing pilot points with PEST++. In this class, we will use some kick-ass <code>pyemu</code> sweetness.</p>
+<p>The following section relies on the use of <code>flopy</code>. Functionality for setting up pilot points in <code>pyemu</code> is limited to MODFLOW models. If you are using other groundwater modelling software, you will need to construct them yourself or check whether it is supported by PLPROC.</p>
+<p>Start by loading the model using <code>flopy</code>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">sim</span> <span class="o">=</span> <span class="n">flopy</span><span class="o">.</span><span class="n">mf6</span><span class="o">.</span><span class="n">MFSimulation</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sim_ws</span><span class="o">=</span><span class="n">tmp_d</span><span class="p">,</span> <span class="n">verbosity_level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#modflow.Modflow.load(fs.MODEL_NAM,model_ws=working_dir,load_only=[])</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">gwf</span><span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+</span></code></pre></div>
+<h3 id="set-up-zones-for-where-pilot-points-will-be-interpolated">Set up zones for where pilot points will be interpolated<a class="headerlink" href="#set-up-zones-for-where-pilot-points-will-be-interpolated" title="Permanent link">&para;</a></h3>
+<p>We can have pilot point networks in multiple zones. In this case, we will make a simple zone file using <code>IDOMAIN</code> such that all active cells are in the same interpolation zone.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">ibound</span><span class="o">=</span><span class="n">gwf</span><span class="o">.</span><span class="n">dis</span><span class="o">.</span><span class="n">idomain</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+</span></code></pre></div>
+<h3 id="get-the-model-spatial-reference">Get the model spatial reference<a class="headerlink" href="#get-the-model-spatial-reference" title="Permanent link">&para;</a></h3>
+<p>We need to get information on the model grid so that <code>pyemu</code> can set up interpolation from pilot points to the model cells:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">sr</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">SpatialReference</span><span class="o">.</span><span class="n">from_namfile</span><span class="p">(</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="s2">&quot;freyberg6.nam&quot;</span><span class="p">),</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>        <span class="n">delr</span><span class="o">=</span><span class="n">gwf</span><span class="o">.</span><span class="n">dis</span><span class="o">.</span><span class="n">delr</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">delc</span><span class="o">=</span><span class="n">gwf</span><span class="o">.</span><span class="n">dis</span><span class="o">.</span><span class="n">delc</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+</span></code></pre></div>
+<p>We are going to use a <code>pyemu</code> helper function to setup pilot points are cell centers for active cells:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># we want hk pilot points in the top layer...</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">prefix_dict</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:[</span><span class="s2">&quot;hk&quot;</span><span class="p">]}</span> 
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">df_pp</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">pp_utils</span><span class="o">.</span><span class="n">setup_pilotpoints_grid</span><span class="p">(</span><span class="n">sr</span><span class="o">=</span><span class="n">sr</span><span class="p">,</span>  <span class="c1"># model spatial reference</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>                                              <span class="n">ibound</span><span class="o">=</span><span class="n">ibound</span><span class="p">,</span> <span class="c1"># to which cells to setup ppoints</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>                                              <span class="n">prefix_dict</span><span class="o">=</span><span class="n">prefix_dict</span><span class="p">,</span> <span class="c1">#prefix to add to parameter names</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>                                              <span class="n">pp_dir</span><span class="o">=</span><span class="n">tmp_d</span><span class="p">,</span> 
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>                                              <span class="n">tpl_dir</span><span class="o">=</span><span class="n">tmp_d</span><span class="p">,</span> 
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>                                              <span class="n">every_n_cell</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># pilot point spacing</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="n">pp_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s2">&quot;hkpp.dat&quot;</span><span class="p">)</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pp_file</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Let's look at <code>df_pp</code> - it has a lot of useful info. As you can see, <code>pyemu</code> has associated pilot points, to their coordinates, zone and (what will become) parameter data as well as an associated <code>*.tpl</code> file. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">df_pp</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>So cool, we now defined pilot points as a set of spatially distributed parameters...but how do go from pilot points to the model input HK array? Answer: geostatistics.  </p>
+<p>We need to calculate the geostatistical factors (weights) used to form the interpolated value for the HK value at each model cell - its a spatially-weighted combination of pilot point values</p>
+<h3 id="kriging-factors-and-regularization-inputs">Kriging factors and regularization inputs<a class="headerlink" href="#kriging-factors-and-regularization-inputs" title="Permanent link">&para;</a></h3>
+<p>Following the guidelines in <em>Approaches to Highly Parameterized Inversion: Pilot-Point Theory, Guidelines, and Research Directions</em> https://pubs.usgs.gov/sir/2010/5168/</p>
+<p>From <em>PEST Groundwater Data Utilities Part A: Overview</em> page 43, there are 4 acceptable variogram types:</p>
+<ol>
+<li>
+<p><em>Spherical</em><br />
+<span class="arithmatex">\(\gamma\left(h\right)=c\times\left[1.5\frac{h}{a}-0.5\frac{h}{a}^3\right]\)</span> if <span class="arithmatex">\(h&lt;a\)</span>
+ <span class="arithmatex">\(\gamma\left(h\right)=c\)</span> if <span class="arithmatex">\(h \ge a\)</span>  </p>
+</li>
+<li>
+<p><em>Exponential</em><br />
+<span class="arithmatex">\(\gamma\left(h\right)=c\times\left[1-\exp\left(-\frac{h}{a}\right)\right]\)</span>  </p>
+</li>
+<li>
+<p><em>Gaussian</em><br />
+<span class="arithmatex">\(\gamma\left(h\right)=c\times\left[1-\exp\left(-\frac{h^2}{a^2}\right)\right]\)</span>  </p>
+</li>
+<li>
+<p><em>Power</em><br />
+<span class="arithmatex">\(\gamma\left(h\right)=c\times h^a\)</span></p>
+</li>
+</ol>
+<p>The number refers to <code>VARTYPE</code>. </p>
+<p><code>BEARING</code> and <code>ANISOTROPY</code> only apply if there is a principal direction of anisotropy. </p>
+<p><span class="arithmatex">\(h\)</span> is the separation distance, and <span class="arithmatex">\(a\)</span> is the range, expressed with the <code>A</code> parameter.</p>
+<h3 id="first-lets-create-variogram-and-geostruct-objects">First, let's create <code>variogram</code> and <code>GeoStruct</code> objects.<a class="headerlink" href="#first-lets-create-variogram-and-geostruct-objects" title="Permanent link">&para;</a></h3>
+<p>These describe how HK varies spatially. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">v</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">geostats</span><span class="o">.</span><span class="n">ExpVario</span><span class="p">(</span><span class="n">contribution</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">anisotropy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bearing</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">gs</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">geostats</span><span class="o">.</span><span class="n">GeoStruct</span><span class="p">(</span><span class="n">variograms</span><span class="o">=</span><span class="n">v</span><span class="p">,</span><span class="n">nugget</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">ax</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Now, let's get an <code>OrdinaryKrige</code> object, which needs the <code>GeoStruct</code> as well as the x, y, and name of the pilot point locations (which happens to be in that really cool <code>df_pp</code> instance)</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">ok</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">geostats</span><span class="o">.</span><span class="n">OrdinaryKrige</span><span class="p">(</span><span class="n">gs</span><span class="p">,</span><span class="n">df_pp</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Once the <code>OrdinaryKrige</code> is created, we need to calculate the geostatistical interpolation factors for each model cell.  We do this with the <code>.calc_factors_grid()</code> method: it needs to know about the model's spatial orientation and also accepts some optional arguments:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">df</span> <span class="o">=</span> <span class="n">ok</span><span class="o">.</span><span class="n">calc_factors_grid</span><span class="p">(</span><span class="n">sr</span><span class="p">,</span><span class="n">var_filename</span><span class="o">=</span><span class="s2">&quot;freyberg.var.ref&quot;</span><span class="p">,</span> <span class="n">minpts_interp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">maxpts_interp</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="p">)</span>
+</span></code></pre></div>
+<p>One of the really cool things about geostatistics is that it gives you both the interpolation (factors), but also gives you the uncertainty in the areas between control (pilot) points.  Above, we wrote this uncertainty information to an array that has the same rows and cols as the model grid - this array is very useful for understanding the function of the variogram.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">arr_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;freyberg.var.ref&quot;</span><span class="p">)</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">p</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">arr_var</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">sr</span><span class="o">.</span><span class="n">get_extent</span><span class="p">(),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df_pp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">df_pp</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>We see that at the pilot point locations (red dots), the uncertainty in the geostats is minimal...as expected. The color scale is uncertainty. It increases with distance to pilot points.</p>
+<p>The call to <code>.calc_factors_grid()</code> also returns a <code>DataFrame</code> which has useful info - lets look:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>We see that there is one row for each model cell, and for each row, we see the distance, names, and weight for the "nearby" pilot points.  The interpolated value for cells that have a pilot point at their center only need one weight - 1.0 - and one pilot point.  Other cells are weighted combinations of pilot points. </p>
+<h3 id="back-to-linking-pilot-points-to-grid-values">Back to linking pilot points to grid values<a class="headerlink" href="#back-to-linking-pilot-points-to-grid-values" title="Permanent link">&para;</a></h3>
+<p>Now we need to save the factors (weights) to a special file that we will use later to quickly generate a new HK array from a set of pilot point values:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">ok</span><span class="o">.</span><span class="n">to_grid_factors_file</span><span class="p">(</span><span class="n">pp_file</span><span class="o">+</span><span class="s2">&quot;.fac&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Just for demo purposes, lets generate <code>random</code> pilot point values and run them through the factors to see what the <code>hk</code> array looks like</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># generate random values</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">df_pp</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s2">&quot;parval1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">df_pp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># save a pilot points file</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">pp_utils</span><span class="o">.</span><span class="n">write_pp_file</span><span class="p">(</span><span class="n">pp_file</span><span class="p">,</span><span class="n">df_pp</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># interpolate the pilot point values to the grid</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">hk_arr</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">geostats</span><span class="o">.</span><span class="n">fac2real</span><span class="p">(</span><span class="n">pp_file</span><span class="p">,</span> <span class="n">factors_file</span><span class="o">=</span><span class="n">pp_file</span><span class="o">+</span><span class="s2">&quot;.fac&quot;</span><span class="p">,</span><span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># plot</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">hk_arr</span><span class="p">,</span><span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">sr</span><span class="o">.</span><span class="n">get_extent</span><span class="p">(),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df_pp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">df_pp</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>What happens if you recalculate the factors using one point for every cell? Change <code>max_interp_pts</code> to 1 in the <code>calc_factors_grid()</code> and rerun these cells.</p>
+<h3 id="foreshadowing-an-aside-on-geostatistics-and-covariance-matrices">(Foreshadowing) An aside on geostatistics and covariance matrices<a class="headerlink" href="#foreshadowing-an-aside-on-geostatistics-and-covariance-matrices" title="Permanent link">&para;</a></h3>
+<p>The <code>GeoStruct</code> object above was used to interpolate from pilot point locations to each node in the grid.  But this same <code>GoeStruct</code> also has an important information regarding how the pilot points are related to each other spatially---that is, the <code>GeoStruct</code> object implies a covariance matrix.  Let's form that matrix </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">cov</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">(</span><span class="n">df_pp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">df_pp</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">df_pp</span><span class="o">.</span><span class="n">parnme</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cov</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">cov</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>What do these numbers mean?  Why should you care?  Well, this covariance matrix plays an important role in uncertainty quantification, as well as in governing the way pilot point parameters are adjusted during calibration. We will return to these toics in future tutorials.</p>
+<p>Now back to setting up our pilot points and control file.</p>
+<h2 id="build-a-control-file-using-these-pilot-points">Build a control file using these pilot points<a class="headerlink" href="#build-a-control-file-using-these-pilot-points" title="Permanent link">&para;</a></h2>
+<p>There's a fair amount of support in pyemu for building control files and setting PEST interfaces.  Here we will only briefly touch on some of the basic components.  If you have created template files and instruction files, and have used our proposed naming convention, then you can quickly generate a control file using the following call</p>
+<p>First let's just get rid of the existing <code>hk1</code> parameter (for simplicity, we are simply going to replace it with the pilot point parameters):</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">hk_parval</span><span class="p">,</span> <span class="n">hkub</span><span class="p">,</span> <span class="n">hklb</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;hk1&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;parval1&#39;</span><span class="p">,</span><span class="s1">&#39;parlbnd&#39;</span><span class="p">,</span><span class="s1">&#39;parubnd&#39;</span><span class="p">]]</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="n">hk_parval</span><span class="p">,</span> <span class="n">hkub</span><span class="p">,</span> <span class="n">hklb</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">drop_parameters</span><span class="p">(</span><span class="n">tpl_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s1">&#39;freyberg6.npf_k_layer1.txt.tpl&#39;</span><span class="p">),</span> <span class="n">pst_path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="p">)</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="c1"># remove the .tpl file for tidiness</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s1">&#39;freyberg6.npf_k_layer1.txt.tpl&#39;</span><span class="p">)</span> <span class="p">)</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># check the difference</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span>
+</span></code></pre></div>
+<p>Now add in the pilot point parameters by reading the <code>*.tpl</code> file we created earlier:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">par_pp</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">add_parameters</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s1">&#39;hkpp.dat.tpl&#39;</span><span class="p">),</span> <span class="n">pst_path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span> <span class="p">)</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="n">par_pp</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Update the pilot point parameter data:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">par_pp</span><span class="o">.</span><span class="n">parnme</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;parval1&#39;</span><span class="p">,</span><span class="s1">&#39;parlbnd&#39;</span><span class="p">,</span><span class="s1">&#39;parubnd&#39;</span><span class="p">,</span> <span class="s1">&#39;pargp&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">hk_parval</span><span class="p">,</span> <span class="n">hkub</span><span class="p">,</span> <span class="n">hklb</span><span class="p">,</span> <span class="s1">&#39;hk1&#39;</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="model-pre-processor">Model Pre-Processor<a class="headerlink" href="#model-pre-processor" title="Permanent link">&para;</a></h2>
+<p>We have added the pilot point parameters to the control file, but still need to add a pre-processor to the "model run" batch/script file. Currently, it only runs MODFLOW and MODPATH. We need an additional step beforehand to interpolate values from pilot points to model grid and assign values to model input files (as we did earlier.)</p>
+<p>Easy enough, let's write a python script file that implements the same steps we did above, as well as run MODFLOW and MODPATH.</p>
+<p>Write a model run script, with a pre-processor:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="s2">&quot;forward_run.py&quot;</span><span class="p">),</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>    <span class="c1">#add imports</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;import os</span><span class="se">\n</span><span class="s2">import shutil</span><span class="se">\n</span><span class="s2">import pandas as pd</span><span class="se">\n</span><span class="s2">import numpy as np</span><span class="se">\n</span><span class="s2">import pyemu</span><span class="se">\n</span><span class="s2">import flopy</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>    <span class="c1"># preprocess pilot points to grid</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;pp_file = &#39;hkpp.dat&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;hk_arr = pyemu.geostats.fac2real(pp_file, factors_file=pp_file+&#39;.fac&#39;,out_file=&#39;freyberg6.npf_k_layer1.txt&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>    <span class="c1"># run MF6 and MP7</span>
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;pyemu.os_utils.run(&#39;mf6&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-9"><a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;pyemu.os_utils.run(&#39;mp7 freyberg_mp.mpsim&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>And then make sure to update the <code>Pst</code> to reflect the new "model run" command:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">model_command</span> 
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">model_command</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python forward_run.py&#39;</span><span class="p">]</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">model_command</span> 
+</span></code></pre></div>
+<p>Re-write and run PEST++:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span> <span class="o">=</span> <span class="mi">0</span> 
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_pp.pst&#39;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Watch the terminal window where you launched this notebook to see the progress of PEST++.  Advance through the code blocks when you see a 0 returned.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">os_utils</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;pestpp-glm freyberg_pp.pst&quot;</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">tmp_d</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Check if it completed successfully:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">pst</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Pst</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_pp.pst&#39;</span><span class="p">))</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="k">assert</span> <span class="n">pst</span><span class="o">.</span><span class="n">phi</span>
+</span></code></pre></div>
+<p>Good to go. We will pick up from here in the next tutorial notebook.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <!-- Footer -->
+<footer class="md-footer">
+
+    <!-- Link to previous and/or next page -->
+    
+  
+    <!-- Further information -->
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+  
+        <!-- Social links -->
+        
+
+        
+        <!-- Repository information -->
+        
+            <a href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    In-For-Disaster-Analytics/GMDSI_notebooks
+  </div>
+</a>
+        
+      </div>
+    </div>
+  </footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.code.select", "header.autohide", "navigation.expand", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1986 @@
+<!-- Elements added to "main.html" will be displayed on all pages -->
+ 
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Information in support of the Groundwater Decision Support Modeling tutorials. (Forked Repo)
+Hugman, R., White, J.T., Fienen, M.N., and Hunt, R.J., 2022, Parameter Estimation, Uncertainty Analysis, and Optimization with the PEST++ Family of codes: Tutorial Jupyter Notebooks: U.S. Geological Survey data release, https://doi.org/10.5066/P901F9G0.">
+      
+      
+        <meta name="author" content="GMDSI Team">
+      
+      
+        <link rel="canonical" href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks/part1/intro_to_regularization/">
+      
+      
+        <link rel="prev" href="../freyberg_pilotpoints_2_run/">
+      
+      
+        <link rel="next" href="../intro_to_fosm/">
+      
+      
+      <link rel="icon" href="https://cdn.jsdelivr.net/gh/TACC/Core-CMS-Custom@813aa7c/ptdatax_assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>Regularization - Groundwater Modeling Decision Support</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family='Benton+Sans',+'Open+Sans':300,300i,400,400i,700,700i%7CRoboto:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"'Benton Sans', 'Open Sans'";--md-code-font:"Roboto"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/tacc.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#addressing-the-ill-posed-inverse-problem" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Determine classes -->
+
+
+  
+
+
+<!-- Header -->
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav
+    class="md-header__inner md-grid"
+    aria-label="Header"
+  >
+
+    <!-- Link to home -->
+    <a
+      href="../.."
+      title="Groundwater Modeling Decision Support"
+      class="md-header__button md-logo"
+      aria-label="Groundwater Modeling Decision Support"
+      data-md-component="logo"
+    >
+      
+  <img src="../../assets/pt2050/pillar1.svg" alt="logo">
+
+    </a>
+
+    <!-- Button to open drawer -->
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Groundwater Modeling Decision Support
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Regularization
+            
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Button to open search modal -->
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+
+      <!-- Search interface -->
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    <!-- Color palette toggle -->
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+
+    <!-- User preference: color palette -->    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+
+    <!-- Site language selector -->
+    
+
+
+
+    <!-- Repository information -->
+    <!-- Removed -->
+  </nav>
+
+  <!-- Navigation tabs (sticky) -->
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  GMDSI Tutorial Notebooks
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../intro/" class="md-tabs__link">
+          
+  
+    
+  
+  Selected Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  Theory, Concepts and PEST Mechanics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../part2/" class="md-tabs__link">
+          
+  
+    
+  
+  Decision Support Modelling
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Groundwater Modeling Decision Support" class="md-nav__button md-logo" aria-label="Groundwater Modeling Decision Support" data-md-component="logo">
+      
+  <img src="../../assets/pt2050/pillar1.svg" alt="logo">
+
+    </a>
+    Groundwater Modeling Decision Support
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    In-For-Disaster-Analytics/GMDSI_notebooks
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GMDSI Tutorial Notebooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../intro/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Selected Topics
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Selected Topics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_regression/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Regression
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_pyemu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to pyEMU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_geostatistics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Geostatistics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_bayes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Bayes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/intro_to_svd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to SVD
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Theory, Concepts and PEST Mechanics
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Theory, Concepts and PEST Mechanics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_trial_and_error/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual Trial-and-Error
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_pest_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST Basics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_k/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automated Calibration with PEST
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_k_and_r/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Calibration with Two Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_k_r_fluxobs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multiple Observation Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_glm_response_surface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GLM and the Objective Function Response Surface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_pilotpoints_1_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spatial Parameterisation with Pilot Points - setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_pilotpoints_2_run/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spatial Parameterisation with Pilot Points - run
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Regularization
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Regularization
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#regularization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Regularization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-tikhonov-regularization" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Tikhonov Regularization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Tikhonov Regularization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prior-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prior Information
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pilot-point-regularization-can-be-propagated-to-other-pilot-points-or-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pilot point regularization can be propagated to other pilot points, or not.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#likewise-pilot-point-regularization-can-also-be-grouped-or-limited-to-specific-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Likewise, pilot-point regularization can also be grouped or limited to specific areas.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#but-there-is-more-to-think-about" class="md-nav__link">
+    <span class="md-ellipsis">
+      But there is more to think about:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="But there is more to think about:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#final-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final point:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-singular-value-decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Singular Value Decomposition
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intro_to_fosm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to FOSM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_1_local_sensitivity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Sensitivity and Identifiability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_2_global_sensitivity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Global Sensitivity Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freyberg_monte_carlo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monte Carlo
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../part2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Decision Support Modelling
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Decision Support Modelling
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_pstfrom_pest_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Constructing a High-Dimensional PEST Interface with pyEMU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_obs_and_weights/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Observation Values, Weights and Noise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_prior_monte_carlo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prior Monte Carlo
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_glm_1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++GLM - Calculating a Jacobian Matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_fosm_and_dataworth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FOSM and Data Worth
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_glm_2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++GLM - Highly- Parameterized Regularized Inversion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_ies_1_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++IES - Basics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_ies_2_localization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++IES - Localization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_da_prep/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++DA - Getting Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../part2/freyberg_da_run/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEST++DA - Sequential Data Assimilation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#regularization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Regularization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-tikhonov-regularization" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Tikhonov Regularization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Tikhonov Regularization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prior-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prior Information
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pilot-point-regularization-can-be-propagated-to-other-pilot-points-or-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pilot point regularization can be propagated to other pilot points, or not.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#likewise-pilot-point-regularization-can-also-be-grouped-or-limited-to-specific-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Likewise, pilot-point regularization can also be grouped or limited to specific areas.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#but-there-is-more-to-think-about" class="md-nav__link">
+    <span class="md-ellipsis">
+      But there is more to think about:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="But there is more to think about:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#final-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final point:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-singular-value-decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Singular Value Decomposition
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+
+
+                  
+
+  
+  
+
+
+<h1 id="addressing-the-ill-posed-inverse-problem">Addressing the Ill-Posed Inverse Problem<a class="headerlink" href="#addressing-the-ill-posed-inverse-problem" title="Permanent link">&para;</a></h1>
+<p>This tutorial picks up following the "Freyberg pilot points" tutorial in which we added a lot more adjustable parameters. We saw that this allowed us to get an excellent fit with measured data (too good!) but resulted in unrealistic parameter fields. Not to mention that we still underrepresented forecast uncertainty.</p>
+<h2 id="regularization">Regularization<a class="headerlink" href="#regularization" title="Permanent link">&para;</a></h2>
+<p>We have more unknown parameters than observations. Thus, we have an ill-posed inverse problem. The mathematical term for the process through which a unique solution is sought for a nonunique inverse problem is “regularization”. The goal of regularised inversion is to seek a unique parameter field that results in a suitable fit between model outputs and field measurements, whilst minimizing the potential for wrongness in model predictions. That is, out of all the ways to fit a calibration dataset, regularized inversion seeks the parameter set of minimum error variance.</p>
+<p>There are two main approaches used to stabilize this problem: 
+ 1) adding soft knowledge and/or 
+ 2) reducing the problem dimensionality. </p>
+<p>These methods can be used by themselves, but are most commonly applied together.</p>
+<h2 id="1-tikhonov-regularization">1. Tikhonov Regularization<a class="headerlink" href="#1-tikhonov-regularization" title="Permanent link">&para;</a></h2>
+<p>We have moved up the simplicity-complexity curve because now we have many more parameters, even more than our observations.  But have we passed the sweetspot? One way to seek a parameter field of minimum error variance is to seek a parameter field that allows the model to fit the calibration dataset, but whose values are also as close as possible to a set of “preferred parameter values”.</p>
+<p><img src="../intro_to_regularization_files/Hunt1998_sweetspot.png" style="float: center"></p>
+<p>Again, it is not simply the number of parameters that is at issue.  The better way to think of it is that we just want to avoid "living beyond our means". That is, we do not bring more parameters to bear than we have the ability to constrain.  We constrain them observations as we have seen so far, but we also know things about the system that are not hard data like measurements.  This "soft-knowledge" can also be applied to  constrain our parameters through a mechanism called <strong>"Tikhonov regularization"</strong>.  In this formulation of the inverse problem, we add a second term to our "best fit" metric Phi. This second term reflects the deviation from our soft-knowledge of the system, and is a penalty to our fit. Here's how it looks using the Anderson et al. (2015) formulation:</p>
+<p><img src="../intro_to_regularization_files/tik-reg_eq9.8.png" style="float: center"></p>
+<p>As first term after the equal sign is our <strong>measurement objective function</strong>, which we've been working with all week.  The last term on the right is called the <strong>"regularization objective function"</strong>. These 2 terms combine to create a <strong>total Phi</strong> on the left.  <strong>Now Total Phi is what we minimize</strong>, which means we are minimizing our observed-to-simulated residuals <strong>AND</strong> the deviation from soft-knowledge.  So in this way Tikhonov regularization is a "dual-constrained minimization".  </p>
+<p>Andrey Tikhonov
+<img src="../intro_to_regularization_files/Andrey_Tikhonov_picture.jpeg" style="float: center"></p>
+<p>Anderson et al. (2015) looks a little closer at this in equation 9.9:</p>
+<p><img src="../intro_to_regularization_files/tik-reg_eq9.9.png" style="float: center"></p>
+<p>The first term to the right of the equals sign is the measurement objective function from
+Eqn (9.6), which is calculated as the sum of squared weighted residuals, where <em>n</em> residuals,
+<em>ri</em>, are calculated from hard knowledge and wi are their respective weights. The second
+term quantifies the penalty resulting from deviations from soft knowledge as the sum
+of <em>q</em> deviations from <em>j</em> soft knowledge conditions <em>fj</em>, where <em>fj</em> is a function of model parameters
+<em>p</em>. A calibrated model, therefore, is found by minimizing both the measurement
+objective function (hard data) and the soft knowledge penalty.</p>
+<blockquote>
+<p><strong>Take-home point #1 from these equations:</strong>
+When Tikhonov is set up correctly, PEST(++) should only deviate from the preferred condition when there is a sufficient improvement in our fit to the observations (= the measurement objective function).  </p>
+<p><strong>Take-home point #2 from these equations:</strong><br />
+The two contributors to our total <span class="arithmatex">\(Phi\)</span> are <strong><em>carried separately in the parameter estimation</em></strong>.  </p>
+<p>This is important. It allows us to control the balance between fitting measured data and respecting expert knowledge. This is how we avoid <strong>overfitting</strong>.</p>
+</blockquote>
+<h3 id="prior-information">Prior Information<a class="headerlink" href="#prior-information" title="Permanent link">&para;</a></h3>
+<p>How do we express soft-knowledge quantitatively so we can minimize it?</p>
+<p>PEST(++) provides a user with a great deal of flexibility in how Tikhonov constraints can be introduced to an inversion process. The easiest way is to do this is through the use of prior information equations. When prior information equations are employed, Tikhonov constraints are expressed through preferred values that are assigned to linear relationships between parameters. (Equality is the simplest type of linear relationship.) Weights must be assigned to these equations. As is described in PEST documentation, when PEST is run in “regularization” mode, it makes internal adjustments to the weights that are assigned to any observations or prior information equations that belong to special observation groups that are referred to as “regularization groups”. </p>
+<p>We add preferred conditions.  These are typically:</p>
+<ol>
+<li><em>preferred  value</em> - "I believe this Kh parameter is around 1 m/d"</li>
+<li><em>preferred difference</em> - "I believe  this area has a Kh 10 m/d higher than that area" </li>
+</ol>
+<p>One of the most useful preferred condition for collapsing all these parameters to fewer bins is a special case of preferred difference where the difference = 0.  This is often called: <strong>"preferred homogeneity"</strong> -  which equates to something along the lines of "I believe this area has homogeneous Kh" </p>
+<p>Of these, <strong>preferred value</strong> is the easiest implement, and least memory intensive, preferred condition.   <code>pyemu</code> implements this with functionality called "<em><strong>zero_order_tikhonov</strong></em>". (Make sure the initial values in the control file represent your soft-knowledge!) <code>pyemu</code> also has preferred difference available - look for <em>"<strong>first_order_pearson_tikhonov</strong>"</em>.  We'll see both of these in this notebook. We will demonstrate these functions further on.</p>
+<h3 id="pilot-point-regularization-can-be-propagated-to-other-pilot-points-or-not">Pilot point regularization can be propagated to other pilot points, or not.<a class="headerlink" href="#pilot-point-regularization-can-be-propagated-to-other-pilot-points-or-not" title="Permanent link">&para;</a></h3>
+<p>Here are two examples from Anderson et al. (2015).  For "preferred value" <strong>(below (a), left)</strong> there is no cross-talk between pilot points.  The initial parameter value of each pilot point is the preferred value.  For preferred difference <strong>(below (a), right)</strong>, there is a radius of influence that connects the pilot point regularization (think correlation length from geostatistics).  </p>
+<p><img src="../intro_to_regularization_files/Fig9.15a_Muffles_pp.png" style="float: center"></p>
+<h3 id="likewise-pilot-point-regularization-can-also-be-grouped-or-limited-to-specific-areas">Likewise, pilot-point regularization can also be grouped or limited to specific areas.<a class="headerlink" href="#likewise-pilot-point-regularization-can-also-be-grouped-or-limited-to-specific-areas" title="Permanent link">&para;</a></h3>
+<p>For example, if the geology of a site suggests distinct units you can only apply the preferred difference to just the zone:</p>
+<p><img src="../intro_to_regularization_files/Fig9.15b_Kyle_Larry_pp.png" style="float: center"></p>
+<p>Here's the caption from Anderson et al. (2015) for posterity:  Figure 9.15 Pilot Points. (a) Network of pilot points in a watershed-scale groundwater flow model (left); linkages between pilot points (right) used to calculate Tikhonov regularization constraints for preferred homogeneity (modified from Muffels, 2008). (b) Network of pilot points used to represent two hydraulic conductivity zones where Tikhonov regularization is applied to pilot points within the same zone (modified from Davis and Putnam, 2013).</p>
+<h3 id="but-there-is-more-to-think-about">But there is more to think about:<a class="headerlink" href="#but-there-is-more-to-think-about" title="Permanent link">&para;</a></h3>
+<p>Just like our observations, our preferred conditions are given a weight.  Typically it is uniform (usually 1) - this is what the PEST utility <em>addreg1.exe</em> does. On top of this, typically we have the regularization objective function set up to adjust the weights of the different parameter groups during the course of the parameter estimation (IREGADJ variable = 1 in the PEST control file).  See pages 17, 20, and page 34 of <a href="https:/pubs.usgs.gov/sir/2010/5169/">SIR 2010-5169</a>. </p>
+<p><strong>But this is critical</strong> - these typically end up having somewhat subtle effects; the final say in trade-off between the measurement objective function and the regularization objective function is in a <em>user specified variable</em> in the PEST control file called:</p>
+<p><strong><center>PHIMLIM</center></strong></p>
+<p>Many people missed the importance of this variable in the original Doherty (2003) paper that first showed PEST's pilot points and Tikhonov capabilities. This missed importance was addressed in detail in Fienen et al. (2009).  So, for you to do good modeling with these approaches it is critically important that you take this away, so we will state it again in bigger font:  </p>
+<p>The final say in trade-off between the measurement objective function and the regularization objective function is in a <em>user specified variable</em> in the PEST control file called:</p>
+<p><strong><center>PHIMLIM</center></strong></p>
+<p>PHIMLIM is the "Target Measurement Objective Function", which means rather than finding the best fit to the observations, PEST will hit this new PHIMLIM level and  <em>then find the minimum of the regularization objective function</em> (find the parameters that most closely match the preferred conditions while still keeping the PHIMLIM target measurement objective function). </p>
+<p>A good way to think of this is that PHIMLIM controls the trade-off between the two parts of the righthand side of the equal sign in equation 9.8 above. We can plot this tradeoff as a Pareto front between adhering to soft-knowledge (regularization objective function) and getting a better fit (measurement objective function). That looks like:</p>
+<p><img src="../intro_to_regularization_files/Fig9.17_fit_vs_softknowledge_Pareto.png" style="float: center"></p>
+<p>A <strong>key point</strong> is that many points on this curve could be considered a "calibrated model", which equals good fit and reasonable parameters. Which of these we choose is based on professional judgement. Subjective, we know.</p>
+<h4 id="final-point">Final point:<a class="headerlink" href="#final-point" title="Permanent link">&para;</a></h4>
+<p>Here's how PHIMLIM expresses itself on the optimal parameters:</p>
+<p><img src="../intro_to_regularization_files/Fig9.16_PHIMLIM.png" style="float: center"></p>
+<p>So setting PHIMLIM is our primary way to control the degree of fitting, and keep us from <em>overfitting</em>.</p>
+<p>The suggested workflow is to:</p>
+<p>1) Set PHIMLIM very low (e.g., 1.0) and run the parameter estimation.  This throws away the soft-knowledge and finds the best fit to the observations (minimizes the measurement objective function).  </p>
+<p>2) Set PHIMLIM to something like <strong>10% higher</strong> than this lowest Phi.  Re-run the parameter estimation, evaluate if the parameters are too extreme.  If they are, raise PHIMLIM again.</p>
+<p>We'll use this workflow on our pilot point version of Freyberg later.  But first, let's talk a little more about the theory and implementation of <code>prior_information</code> in the PEST datasets.</p>
+<h2 id="2-singular-value-decomposition">2. Singular Value Decomposition<a class="headerlink" href="#2-singular-value-decomposition" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>See the "intro to svd" notebook for an introduction to Singular Value Decomposition.</p>
+</blockquote>
+<p>Tikhonov regularisation adds information to the calibration process in order to achieve numerical stability. In contrast, subspace methods achieve numerical stability by reducing the dimensionality of the problem, removing and/or combining parameters. When employing SVD in calibration, only parameters and linear combinations of parameters that are sufficiently constrained by measured data are estimated. These parameters are said to reside in the <em>solution space</em>. Choosing which parameter combinations to estimate is accomplished via singular value decomposition (SVD). SVD-based parameter estimation fixes initial values for parameters/parameter combinations that are not estimable (reside in the <em>null space</em>) and does not adjust them during inversion. (So, once again, make sure initial parameter values are sensible!)  </p>
+<p>Unlike PEST and PEST_HP, by default, members of the PEST++ suite employ singular value decomposition (or methods closely related to it) for solution of the inverse problem. Unless otherwise specified, default options are employed. PEST++GLM offers two numerical libraries for implementing SVD; the default option will usually suffice (see the PEST++ user manual for details).</p>
+<h1 id="back-to-freyberg">Back to Freyberg<a class="headerlink" href="#back-to-freyberg" title="Permanent link">&para;</a></h1>
+<p>Now that we have gone over a bit of theory, let's apply it to calibrating the Freyberg model. We pick up after the "freyberg pilot point run" notebook. In that tutorial, we saw that adding many more parameters made obtaining a good fit with measured data was easier. Unfortunately, we also saw that this led to "living beyond our means". We have many more parameters than observations (ill posed inverse problem), which resulted in overfitting. Parameter values took on "unrealistic" values to compensate for structural inadequacies of the model (and parameterisation!).</p>
+<p>Let's see if we can fix this problem with regularization.</p>
+<h3 id="admin">Admin<a class="headerlink" href="#admin" title="Permanent link">&para;</a></h3>
+<p>Load the Freyberg model and setup up the PEST control file. The next two cells construct the same setups employed during previous tutorials on pilot points.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span> 
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="p">;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;dependencies&quot;</span><span class="p">))</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pyemu</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="kn">import</span><span class="w"> </span><span class="nn">flopy</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">assert</span> <span class="s2">&quot;dependencies&quot;</span> <span class="ow">in</span> <span class="n">flopy</span><span class="o">.</span><span class="vm">__file__</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="k">assert</span> <span class="s2">&quot;dependencies&quot;</span> <span class="ow">in</span> <span class="n">pyemu</span><span class="o">.</span><span class="vm">__file__</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="kn">import</span><span class="w"> </span><span class="nn">herebedragons</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hbd</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span><span class="mi">10</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># folder containing original model files</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">org_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;models&#39;</span><span class="p">,</span> <span class="s1">&#39;monthly_model_files_1lyr_newstress&#39;</span><span class="p">)</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># a dir to hold a copy of the org model files</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">tmp_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;freyberg_mf6&#39;</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">):</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">org_d</span><span class="p">,</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># get executables</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">hbd</span><span class="o">.</span><span class="n">prep_bins</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># get dependency folders</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">hbd</span><span class="o">.</span><span class="n">prep_deps</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># run our convenience functions to prepare the PEST and model folder</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">hbd</span><span class="o">.</span><span class="n">prep_pest</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="c1"># convenience function that builds a new control file with pilot point parameters for hk</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="n">hbd</span><span class="o">.</span><span class="n">add_ppoints</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># load the pre-constructed pst</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">pst</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Pst</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s1">&#39;freyberg_pp.pst&#39;</span><span class="p">))</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># run it once for checking</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="o">=</span><span class="mi">0</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">pst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s1">&#39;freyberg_pp.pst&#39;</span><span class="p">))</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">os_utils</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;pestpp-glm freyberg_pp.pst&#39;</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">tmp_d</span><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="tikhnov-regularization-as-prior-information">Tikhnov regularization as "prior information"<a class="headerlink" href="#tikhnov-regularization-as-prior-information" title="Permanent link">&para;</a></h2>
+<p>In pyemu, we can add two forms of regularization:
+- preferred <strong>value</strong>: we want the parameter values to stay as close to the initial values as possible
+- preferred <strong>difference</strong>: we prefer the differences in parameter values to be minimized</p>
+<p>Preferred value is easy to understand, we simply add <code>prior_information</code> to the control file to enforce this condition.  <code>pyemu</code> uses a helper for this:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">pst</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Pst</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s1">&#39;freyberg_pp.pst&#39;</span><span class="p">))</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># check if it ran</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">assert</span> <span class="n">pst</span><span class="o">.</span><span class="n">phi</span>
+</span></code></pre></div>
+<p>You can check the <code>prior_information</code> section of the control file like so:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">prior_information</span>
+</span></code></pre></div>
+<p>As you see, it is empty. Let's add preferred value regularization:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># use the pyemu helper to apply preferred value regularization on all the parameters</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">zero_order_tikhonov</span><span class="p">(</span><span class="n">pst</span><span class="p">,</span><span class="n">parbounds</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Boom!</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># make a table of the regularization equations </span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">prior_information</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Note the "regul_" prefix added to the parameter group name (check the <code>obgnme</code> column) - that is how we tell PEST to track the deviations from preferred conditions separately as a Tikhonov regularization.</p>
+<p>Ok, that's fine, but should the weight on preferring a hydraulic conductivity (<code>hk</code>) value be the same as preferring recharge (<code>rch</code>) not to change? Hydraulic conductivity is typically considered to be "known" within an order of magnitude; the uncertainty in recharge is typically considered less than that - say plus or minus 50%. Seems like we would want <code>rch</code> to change less than <code>hk</code>. </p>
+<h3 id="regularization-weights-from-parameter-prior-uncertainty">Regularization weights from parameter prior uncertainty<a class="headerlink" href="#regularization-weights-from-parameter-prior-uncertainty" title="Permanent link">&para;</a></h3>
+<p>There is a neat trick that <code>pyemu</code> gives us: this strength of the preferred value can be inferred from the parameter bounds you specify.  That is, the bounds are used to form the regularization weights; larger bounds = more uncertainty = less weight given to maintaining the initial value during the parameter estimation.  </p>
+<p>Weight is calculated assuming that the range between parameter bounds reflects 4 standard deviations of the (gaussian) prior parameter probability distribution. Assigned weights are equal to the inverse of standard deviation (<span class="arithmatex">\(\sigma\)</span>):</p>
+<div class="arithmatex">\[ \sigma = \frac{parubn - parlbnd}{4}\]</div>
+<div class="arithmatex">\[ weight = \frac{1}{\sigma} \]</div>
+<blockquote>
+<p><strong>Important</strong>. This assumes that the parameter bounds reflect prior parameter uncertainty. So not only should the initial parameter value be assigned carefully, but so should the parameter bounds!</p>
+</blockquote>
+<p>Let's try this again using the parameter bounds to specify prior information equation weights:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># construct preferred value reguarization equations and use the bounds to calculate the regularization weight</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">zero_order_tikhonov</span><span class="p">(</span><span class="n">pst</span><span class="p">,</span> <span class="n">parbounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># print out the regularization equations that were constructed</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">pst</span><span class="o">.</span><span class="n">prior_information</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Now we are given more strength for keeping recharge near its initial value...good! This way, all else being equal, PEST(++) will "prefer" to change <code>hk</code> before it changes <code>rch</code>.</p>
+<h3 id="so-what-about-preferred-difference-regularization">So what about preferred difference regularization?<a class="headerlink" href="#so-what-about-preferred-difference-regularization" title="Permanent link">&para;</a></h3>
+<p>Well <code>pyemu</code> can do that too.  </p>
+<p>The simples form of "preferred difference' is homogeneity. We prefer that the "difference between parameters should equal zero". This is referred to as "first-order pearson tikhonov". But how do we assign weights? How confident are we that this a nearby parameter should have the same value? What about another parameter which is a bit farther away? Geostatistics, that's how.</p>
+<p>Remember that <code>Cov</code>ariance matrix we keep talking about? It expresses the spatial relationship between pilot points (implied by the variogram), so we use to setup these prior information equations.  First we need to make a geostatistical structure to encapsulate the spatial relationships.</p>
+<p>As we have seen in other tutorials (see the "intro to geostatistics", "intro to pyemu" and "freyberg pilot point setup" notebooks), <code>pyemu</code> can prepare a covariance matrix for spatially distributed parameters, based on a geostatistical structure and variogram(s) that reflect our expert knowledge of how we expect parameters to vary. </p>
+<p>For example, construct a variogram:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">v</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">geostats</span><span class="o">.</span><span class="n">ExpVario</span><span class="p">(</span><span class="n">contribution</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">2500.0</span><span class="p">)</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">gs</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">geostats</span><span class="o">.</span><span class="n">GeoStruct</span><span class="p">(</span><span class="n">variograms</span><span class="o">=</span><span class="n">v</span><span class="p">,</span><span class="n">nugget</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">ax</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Now we need to know where the pilot points are.  For this case, we can get this from the pilot point template file:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># make a dataframe called df_pp using pyemu helper and the pilot point template file hkpp.dat.tpl</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">df_pp</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">pp_utils</span><span class="o">.</span><span class="n">pp_tpl_to_dataframe</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span><span class="s2">&quot;hkpp.dat.tpl&quot;</span><span class="p">))</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">df_pp</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Now let's build a covariance matrix for our pilot point parameters from the geostatistical structure:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># define a covariance matrix called cov using pyemu&#39;s geostatistics capabilities</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">cov</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">(</span><span class="n">df_pp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">df_pp</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">df_pp</span><span class="o">.</span><span class="n">parnme</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Take a peek at the covariance matrix we just constructed:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">cov</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+<p>It is now a simple matter of passing this matrix to <code>pyemu.helpers.first_order_pearson_tikhonov()</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># use the pyemu helper to construct preferred difference regularization equations </span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1"># using the covariance for regularization weight</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">first_order_pearson_tikhonov</span><span class="p">(</span><span class="n">pst</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Check out the new 1prior_information` equations. Note how they now reflect the <em>difference</em> between two parameters should equal zero.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># check out the new regularization equations out</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">prior_information</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span></code></pre></div>
+<p>What happened?  </p>
+<p>We replace the preferred value equations with a bunch of new equations.  These equations each include two parameter names and have different weights - can you guess what the weights are?  The weights are the <code>pearson correlation coefficients</code> (CC) between the pilot points (remember those from way back?).  These CC values are calculated from the covariance matrix, which is implied by the geostatistical structure...whew! For example, <code>hk_i:2_j:2_zone:1.0</code> is "close" to <code>hk_i:2_j:7_zone:1.0</code>, so they have a high CC value (equation 1).  Just for fun, go back and change the <code>a</code> parameter in the variogram and see how it changes the CC values.</p>
+<blockquote>
+<p><strong>Handy hint</strong>:  you can use both preferred value and preferred difference regularization in the same PEST control file, and even on the same parameter!</p>
+</blockquote>
+<h2 id="the-big-kahuna-phimlim">The Big Kahuna - PHIMLIM<a class="headerlink" href="#the-big-kahuna-phimlim" title="Permanent link">&para;</a></h2>
+<p>And, most importantly we need to see what pyemu has for the all important regularization BIG KNOB, the target objective function - or <code>phimlim</code>.  This is THE ONE INPUT that tells PEST how regularization is enforced.  So let's use pyemu to see what our control file has for <code>phimlim</code>.  </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># for the PEST control file defined by pst above, echo out phimlim</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimlim</span>
+</span></code></pre></div>
+<p>That is <strong><em>very low</em></strong>  for a final parameter estimation.  But recall our workflow from earlier on, this value is just a "placeholder" to ignore soft knowledge and only focus on obtaining the best fit.  After the how-low-can-PEST-go run, <code>phimlim</code> should be set to a larger number, say the number of non-zero weighted obs (assuming that observation weights are the inverse of standard deviation of noise!).  Here we'll explore the effect of <code>phimlim</code> a bit.  </p>
+<p>Now, we have already undertaken an un-regularized parameter estimation run. Effectively that is what we did in the "freyberg pilot point run" notebook. We got a really good fit - much better than is reasonable give the uncertainty (e.g. noise) in our observation data (check the previous notebook to get the value of Phi).</p>
+<p>How many non-zero weighted observations do we have?</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">nnz_obs</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">nnz_obs</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">nnz_obs</span>
+</span></code></pre></div>
+<p>A convenience of weighting with the inverse of the measurement uncertainty (which we have done in this case) is that it is easy to know what the ideal Phi should be: it should be equal to the number of non-zero weighted observations. </p>
+<p>This of course assumes that all model-to-measurement misfit is due to <em>measurement</em> uncertainty. In practice, model error usually plays a larger role, as we will see in other tutorials. </p>
+<p>So, let's assign PHILIM equal tot he number of non-zero weighted observations:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimlim</span> <span class="o">=</span> <span class="n">nnz_obs</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimlim</span>
+</span></code></pre></div>
+<p>When changing PHIMLIM, we must also change PHIMACCEPT. This is the level of acceptable "measurement objective function". If PEST(++) achieves PHIMLIM, it will then attempt to minimize the <em>regularisation</em> objective function, whilst maintaining the <em>measurement</em> objective function below PHIMACCEPT.</p>
+<p>Ideally, PHIMACCEPT should be assigned 5-10% higher than PHIMLIM.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># when phimlim changes so should phimaccept, and is usually 5-10% higher than phimlim</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimaccept</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimlim</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimaccept</span>
+</span></code></pre></div>
+<p>One last important detail! Make sure we set the <code>pestmode</code> to regularization. This should have happened by default when we used the <code>pyemu.helpers</code> to assign prior information equations.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">assert</span> <span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">pestmode</span> <span class="o">==</span> <span class="s1">&#39;regularization&#39;</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">pestmode</span>
+</span></code></pre></div>
+<h2 id="write-and-run">Write and Run<a class="headerlink" href="#write-and-run" title="Permanent link">&para;</a></h2>
+<p>Sheesh - this was a long one. Hope you are still with us. Let's now re-write the PEST control file and run it!</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span><span class="o">=</span><span class="mi">20</span>
+</span></code></pre></div>
+<p>We need to remove some PEST++ optional variables (we haven't mentioned these before; they control PEST++GLM SVD-Assist options. We shan't discuss these here. See tutorials on PEST++GLM in Part2 of these tutorial notebooks for more information.)</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;n_iter_base&#39;</span><span class="p">)</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">pestpp_options</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;n_iter_super&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Write the control file again:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_reg.pst&#39;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Remember to specify the number which is adequate for <strong><em>your</em></strong> machine! Make sure to assign an appropriate value for the following <code>num_workers</code> variable. (If you are unsure how many cores you have, you can use <code>psutil</code> to check).</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># set the number of parallel agents</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="n">num_workers</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="c1"># set the master directory</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="n">m_d</span><span class="o">=</span><span class="s1">&#39;master_reg&#39;</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">os_utils</span><span class="o">.</span><span class="n">start_workers</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="c1"># the folder which contains the &quot;template&quot; PEST dataset</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>                            <span class="s1">&#39;pestpp-glm&#39;</span><span class="p">,</span> <span class="c1">#the PEST software version we want to run</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>                            <span class="s1">&#39;freyberg_reg.pst&#39;</span><span class="p">,</span> <span class="c1"># the control file to use with PEST</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>                            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="c1">#how many agents to deploy</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>                            <span class="n">worker_root</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="c1">#where to deploy the agent directories; relative to where python is running</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>                            <span class="n">master_dir</span><span class="o">=</span><span class="n">m_d</span><span class="p">,</span> <span class="c1">#the manager directory</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>                            <span class="p">)</span>
+</span></code></pre></div>
+<h2 id="outcomes">Outcomes<a class="headerlink" href="#outcomes" title="Permanent link">&para;</a></h2>
+<p>Re-load the control file and check the new Phi:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="n">pst</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Pst</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_reg.pst&#39;</span><span class="p">))</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">phi</span>
+</span></code></pre></div>
+<p>That number looks familiar...what did we assign to PHIMACCEPT again?</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimaccept</span>
+</span></code></pre></div>
+<p>Check out the Phi progress. Interesting. In this case PEST managed to get a fit better than PHIMLIM in the very first iteration (not a usual case). Measurement Phi then increases up to PHIMACCEPT. Subsequent iterations were spent reducing regularization Phi until total Phi is lower than PHIMLIM.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">df_obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_reg.iobj&quot;</span><span class="p">),</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="n">df_obj</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;total_phi&#39;</span><span class="p">,</span><span class="s1">&#39;measurement_phi&#39;</span><span class="p">,</span><span class="s1">&#39;regularization_phi&#39;</span><span class="p">])</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;total_phi&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>What about the fits with measured values? Not perfect...but we aren't looking for a perfect fit here - we are looking for <em>as good a fit</em> as the measured data justifies.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">figs</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;1to1&quot;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Let's inspect the posterior parameter uncertainties for each parameter group. </p>
+<p>The next cell plots the probability distribution for each parameter in each parameter group. Recall that each pilot point is assigned a unique parameter, so in each plot we are displaying multiple distributions. We are also plotting the parameter upper and lower bounds as vertical dashed black lines.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">plot_param_unc</span><span class="p">():</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>    <span class="n">par</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>    <span class="n">df_paru</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg_reg.par.usum.csv&quot;</span><span class="p">),</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">adj_par_groups</span><span class="p">),</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>    <span class="k">for</span> <span class="n">pargp</span> <span class="ow">in</span> <span class="n">pst</span><span class="o">.</span><span class="n">adj_par_groups</span><span class="p">:</span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>        <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>        <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+</span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>        <span class="n">hk_pars</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pst</span><span class="o">.</span><span class="n">par_names</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;hk&quot;</span><span class="p">)]</span>
+</span><span id="__span-29-11"><a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a>        <span class="n">pars</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">par</span><span class="o">.</span><span class="n">pargp</span><span class="o">==</span><span class="n">pargp</span><span class="p">]</span><span class="o">.</span><span class="n">parnme</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-29-12"><a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a>        <span class="n">df_par</span> <span class="o">=</span> <span class="n">df_paru</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pars</span><span class="p">,:]</span>
+</span><span id="__span-29-13"><a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a>        <span class="n">ax</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">plot_summary_distributions</span><span class="p">(</span><span class="n">df_par</span><span class="p">,</span><span class="n">label_post</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</span><span id="__span-29-14"><a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a>        <span class="n">mn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span><span class="s2">&quot;parlbnd&quot;</span><span class="p">])</span>
+</span><span id="__span-29-15"><a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a>        <span class="n">mx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pst</span><span class="o">.</span><span class="n">parameter_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span><span class="s2">&quot;parubnd&quot;</span><span class="p">])</span>
+</span><span id="__span-29-16"><a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">pargp</span><span class="p">)</span>
+</span><span id="__span-29-17"><a id="__codelineno-29-17" name="__codelineno-29-17" href="#__codelineno-29-17"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">mn</span><span class="p">,</span><span class="n">mn</span><span class="p">],</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">(),</span><span class="s2">&quot;k--&quot;</span><span class="p">)</span>
+</span><span id="__span-29-18"><a id="__codelineno-29-18" name="__codelineno-29-18" href="#__codelineno-29-18"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">mx</span><span class="p">,</span><span class="n">mx</span><span class="p">],</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">(),</span><span class="s2">&quot;k--&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">plot_param_unc</span><span class="p">()</span>
+</span></code></pre></div>
+<p>A lot better than before! We are no longer getting lots pf parameters at their bounds. Yay.</p>
+<p>Let's take a look at the calibrated parameter K field. First we just need to update the model files with the calibrated parameter values:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">parrep</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span> <span class="s2">&quot;freyberg_reg.par&quot;</span> <span class="p">))</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">write_input_files</span><span class="p">(</span><span class="n">pst_path</span><span class="o">=</span><span class="n">m_d</span><span class="p">)</span>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">geostats</span><span class="o">.</span><span class="n">fac2real</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;hkpp.dat&quot;</span><span class="p">),</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>                        <span class="n">factors_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;hkpp.dat.fac&quot;</span><span class="p">),</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>                        <span class="n">out_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;freyberg6.npf_k_layer1.txt&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">os_utils</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;python forward_run.py&#39;</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">m_d</span><span class="p">)</span>
+</span></code></pre></div>
+<p>And then use <code>flopy</code> to plot:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="n">df_pp</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">pp_utils</span><span class="o">.</span><span class="n">pp_tpl_to_dataframe</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span><span class="s2">&quot;hkpp.dat.tpl&quot;</span><span class="p">))</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="n">sim</span> <span class="o">=</span> <span class="n">flopy</span><span class="o">.</span><span class="n">mf6</span><span class="o">.</span><span class="n">MFSimulation</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sim_ws</span><span class="o">=</span><span class="n">m_d</span><span class="p">,</span> <span class="n">verbosity_level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#modflow.Modflow.load(fs.MODEL_NAM,model_ws=working_dir,load_only=[])</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="n">gwf</span><span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="n">mm</span> <span class="o">=</span> <span class="n">flopy</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">PlotMapView</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">gwf</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a>
+</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="n">k</span> <span class="o">=</span> <span class="n">gwf</span><span class="o">.</span><span class="n">npf</span><span class="o">.</span><span class="n">k</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+</span><span id="__span-34-6"><a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="n">vmax</span><span class="o">=</span><span class="mi">40</span>
+</span><span id="__span-34-7"><a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a><span class="n">vmin</span><span class="o">=</span><span class="mi">2</span>
+</span><span id="__span-34-8"><a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a><span class="n">ca</span> <span class="o">=</span> <span class="n">mm</span><span class="o">.</span><span class="n">plot_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">masked_values</span><span class="o">=</span><span class="p">[</span><span class="mf">1e30</span><span class="p">],)</span><span class="c1">#vmax=np.log10(vmax), vmin=np.log10(vmin))</span>
+</span><span id="__span-34-9"><a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ca</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</span><span id="__span-34-10"><a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;$Log_</span><span class="si">{10}</span><span class="s1">K$&#39;</span><span class="p">)</span>
+</span><span id="__span-34-11"><a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a>
+</span><span id="__span-34-12"><a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a><span class="n">mm</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</span><span id="__span-34-13"><a id="__codelineno-34-13" name="__codelineno-34-13" href="#__codelineno-34-13"></a><span class="n">mm</span><span class="o">.</span><span class="n">plot_inactive</span><span class="p">()</span>
+</span><span id="__span-34-14"><a id="__codelineno-34-14" name="__codelineno-34-14" href="#__codelineno-34-14"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;$K$&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Hey! What's this?! nearly uniform K?? Oh right...that's what we told PEST we preferred. Therefore parameter values were left alone, unless needed to improve the fit.</p>
+<p>What about recharge? Remember from the posterior parameter distributions plotted above, we see <code>rch</code> parameter values deviated from the prior the most.</p>
+<p>Plot recharge spatial distribution:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="n">gwf</span><span class="o">.</span><span class="n">rch</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+</span></code></pre></div>
+<p>So, although we specified that <code>hk</code> parameters were more uncertain than <code>rch</code>, information content in the observation data required changes in <code>rch</code>. Because <code>hk</code> and <code>rch</code> are correlated...only one is changed.</p>
+<p>Is this reasonable? This is where your expert knowledge comes in. If not, perhaps we need to back off on the fit a bit more.</p>
+<p>And as usual, we return to our forecasts. Have we done better this time?</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">plot_forecast_unc</span><span class="p">():</span>
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>    <span class="n">figs</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">plot_summary_distributions</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span>
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>                        <span class="s2">&quot;freyberg_reg.pred.usum.csv&quot;</span><span class="p">),</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="p">)</span>
+</span><span id="__span-36-4"><a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a>    <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+</span><span id="__span-36-5"><a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a>        <span class="n">fname</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</span><span id="__span-36-6"><a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a>        <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+</span><span id="__span-36-7"><a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a>        <span class="n">v</span> <span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">observation_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">fname</span><span class="p">,</span><span class="s2">&quot;obsval&quot;</span><span class="p">]</span>
+</span><span id="__span-36-8"><a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">],</span><span class="n">ylim</span><span class="p">,</span><span class="s2">&quot;b--&quot;</span><span class="p">)</span>
+</span><span id="__span-36-9"><a id="__codelineno-36-9" name="__codelineno-36-9" href="#__codelineno-36-9"></a>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-36-10"><a id="__codelineno-36-10" name="__codelineno-36-10" href="#__codelineno-36-10"></a>    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</span><span id="__span-36-11"><a id="__codelineno-36-11" name="__codelineno-36-11" href="#__codelineno-36-11"></a>
+</span><span id="__span-36-12"><a id="__codelineno-36-12" name="__codelineno-36-12" href="#__codelineno-36-12"></a><span class="n">plot_forecast_unc</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Better...maybe? But still failing. How is this possible?!</p>
+<h2 id="model-to-measurement-misfit-is-not-just-measurement-noise">Model-to-Measurement Misfit is not just Measurement Noise<a class="headerlink" href="#model-to-measurement-misfit-is-not-just-measurement-noise" title="Permanent link">&para;</a></h2>
+<p>We specified PHIMLIM to ensure that, at best, PEST would achieve a fit <em>as good</em> as <strong><em>measured</em></strong> data quality justified. This assumes that the model is actually able to achieve such a fit! </p>
+<p>But! in practice, measurement noise is only one component of model-to-measurement misfit. The other is <strong><em>model error</em></strong>. We are trying to get an ideal fit, with an imperfect model. Perhaps a higher PHIMLLIM would be a more reliable approach. Given the odd parameter distributions above, makes sense.</p>
+<p>But what value to use...How will we know we have eliminated the overfitting problem? Well..in the real-world, we will never know. In practice, this is where your professional judgement comes in. The modeller must decide what is a justifiable level of fit given the models' limitations.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="n">pst</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Pst</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_reg.pst&#39;</span><span class="p">))</span>
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimlim</span> <span class="o">=</span> <span class="n">nnz_obs</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="c1"># when phimlim changes so should phimaccept, and is usually 5-10% higher than phimlim</span>
+</span><span id="__span-38-3"><a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimaccept</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimlim</span>
+</span><span id="__span-38-4"><a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="c1">#check values</span>
+</span><span id="__span-38-5"><a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a><span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimlim</span><span class="p">,</span> <span class="n">pst</span><span class="o">.</span><span class="n">reg_data</span><span class="o">.</span><span class="n">phimaccept</span>
+</span></code></pre></div>
+<p>Run PEST again:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="n">pst</span><span class="o">.</span><span class="n">control_data</span><span class="o">.</span><span class="n">noptmax</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_reg.pst&#39;</span><span class="p">))</span>
+</span><span id="__span-39-3"><a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a>
+</span><span id="__span-39-4"><a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="n">pyemu</span><span class="o">.</span><span class="n">os_utils</span><span class="o">.</span><span class="n">start_workers</span><span class="p">(</span><span class="n">tmp_d</span><span class="p">,</span> <span class="c1"># the folder which contains the &quot;template&quot; PEST dataset</span>
+</span><span id="__span-39-5"><a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a>                            <span class="s1">&#39;pestpp-glm&#39;</span><span class="p">,</span> <span class="c1">#the PEST software version we want to run</span>
+</span><span id="__span-39-6"><a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>                            <span class="s1">&#39;freyberg_reg.pst&#39;</span><span class="p">,</span> <span class="c1"># the control file to use with PEST</span>
+</span><span id="__span-39-7"><a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>                            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="c1">#how many agents to deploy</span>
+</span><span id="__span-39-8"><a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a>                            <span class="n">worker_root</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="c1">#where to deploy the agent directories; relative to where python is running</span>
+</span><span id="__span-39-9"><a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>                            <span class="n">master_dir</span><span class="o">=</span><span class="n">m_d</span><span class="p">,</span> <span class="c1">#the manager directory</span>
+</span><span id="__span-39-10"><a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a>                            <span class="p">)</span>
+</span></code></pre></div>
+<p>And load it back in again:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="n">pst</span> <span class="o">=</span> <span class="n">pyemu</span><span class="o">.</span><span class="n">Pst</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m_d</span><span class="p">,</span> <span class="s1">&#39;freyberg_reg.pst&#39;</span><span class="p">))</span>
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="n">pst</span><span class="o">.</span><span class="n">phi</span>
+</span></code></pre></div>
+<p>Now we see that parameters have not deviated as much from the initial values. Not surprising, since we set the PHIMLIM so high.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="n">plot_param_unc</span><span class="p">()</span>
+</span></code></pre></div>
+<p>And now the forecasts.</p>
+<p>There we go! For the first time we aren't (entirely) failing to capture the truth values in the posterior forecast distributions. (<em>Although, it is a bit tenuous...are we including enough adjustable parameters in our uncertainty analysis?</em>)</p>
+<p>So, what has happened here? Effectively we have traded a good fit with measured data for larger forecast uncertainty. So, even though we aren't fitting the observations as well, we are doing much better from a model forecast reliability stand point. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="n">plot_forecast_unc</span><span class="p">()</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <!-- Footer -->
+<footer class="md-footer">
+
+    <!-- Link to previous and/or next page -->
+    
+  
+    <!-- Further information -->
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+  
+        <!-- Social links -->
+        
+
+        
+        <!-- Repository information -->
+        
+            <a href="https://github.com/In-For-Disaster-Analytics/GMDSI_notebooks" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    In-For-Disaster-Analytics/GMDSI_notebooks
+  </div>
+</a>
+        
+      </div>
+    </div>
+  </footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.code.select", "header.autohide", "navigation.expand", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
